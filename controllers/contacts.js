@@ -18,7 +18,12 @@ const list = async (_, res, next) => {
 const get = async ({ params: { contactId } }, res, next) => {
   try {
     const contact = await getContactById(contactId);
-    if (!contact) return res.status(404).json({ message: "Contact not found" });
+
+    if (!contact)
+      return res
+        .status(404)
+        .json({ message: `Contact with id:${contactId} not found` });
+
     res.status(200).json(contact);
   } catch (error) {
     next(error);
@@ -53,8 +58,10 @@ const del = async ({ params: { contactId } }, res, next) => {
   try {
     const removedContact = await removeContact(contactId);
     if (!removedContact)
-      return res.status(404).json({ message: "Contact not found" });
-    res.status(200).json({ message: "Contact deleted" });
+      return res
+        .status(404)
+        .json({ message: `Contact with id:${contactId} not found` });
+    res.status(200).json({ message: `Contact  with id:${contactId} deleted` });
   } catch (error) {
     next(error);
   }
@@ -78,7 +85,9 @@ const edit = async ({ params: { contactId }, body }, res, next) => {
 
     const updatedContact = await updateContact(contactId, body);
     if (!updatedContact)
-      return res.status(404).json({ message: "Contact not found" });
+      return res
+        .status(404)
+        .json({ message: `Contact with id:${contactId} not found` });
 
     res.status(200).json(updatedContact);
   } catch (error) {

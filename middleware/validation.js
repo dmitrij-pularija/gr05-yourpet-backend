@@ -7,7 +7,7 @@ const schema = {
     phone: Joi.string().min(6).max(20).trim().required(),
   }).unknown(false),
   edit: Joi.object({
-    name: Joi.string().min(3).max(20),
+    name: Joi.string().alphanum().min(3).max(20),
     email: Joi.string().email(),
     phone: Joi.string().min(6).max(20),
   })
@@ -27,7 +27,8 @@ const getError = (error, type) => {
     .map((detail) => detail.message);
 
   if (unknownField.length > 0) return `Fields: ${unknownField}`;
-  if (requiredFields.length > 0) return `${requiredFields} is required`;
+  if (requiredFields.length > 0)
+    return `Missing required ${requiredFields} field`;
   if (fieldsString.length > 0) return `Incorrect field values: ${fieldsString}`;
 
   if (type === "edit") {
@@ -39,7 +40,7 @@ const getError = (error, type) => {
 const addValidation = ({ body }, res, next) => {
   const { error } = schema.add.validate(body, { abortEarly: false });
 
-  if (error) return res.status(400).json(getError(error, "add"));
+  if (error) return res.status(400).json({ message: getError(error, "add") });
 
   next();
 };
@@ -47,7 +48,7 @@ const addValidation = ({ body }, res, next) => {
 const editValidation = ({ body }, res, next) => {
   const { error } = schema.edit.validate(body);
 
-  if (error) return res.status(400).json(getError(error, "edit"));
+  if (error) return res.status(400).json({ message: getError(error, "edit") });
 
   next();
 };
