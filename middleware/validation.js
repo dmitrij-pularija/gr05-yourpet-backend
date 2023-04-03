@@ -28,7 +28,7 @@ const getError = (error, type) => {
 
   if (unknownField.length > 0) return `Fields: ${unknownField}`;
   if (requiredFields.length > 0)
-    return `Missing required ${requiredFields} field`;
+    return `Missing fields ${requiredFields}`;
   if (fieldsString.length > 0) return `Incorrect field values: ${fieldsString}`;
 
   if (type === "edit") {
