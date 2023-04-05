@@ -1,7 +1,17 @@
+const { isValidObjectId } = require("mongoose");
+
 const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
+      if (
+        ctrl.name !== "add" &&
+        ctrl.name !== "list" &&
+        !isValidObjectId(req.params.contactId)
+      )
+        return res.status(404).json({ message: "Not Found" });
+
       const result = await ctrl(req, res, next);
+
       if (!result) return res.status(404).json({ message: "Not Found" });
       if (result.length === 0 && ctrl.name === "list")
         return res.status(404).json({ message: "Not Found" });

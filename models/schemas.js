@@ -26,8 +26,25 @@ const contacts = new Schema(
       default: false,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
+
+contacts.post("save", (error, data, next) => {
+  const field = Object.keys(error.keyPattern)[0];
+  const message =
+    field === "name"
+      ? "Name must be unique."
+      : field === "email"
+      ? "Email must be unique."
+      : field === "phone"
+      ? "Phone must be unique."
+      : error.message;
+  const responseError = {
+    status: 400,
+    message: message,
+  };
+  return next(responseError);
+});
 
 const Contacts = model("contacts", contacts);
 
