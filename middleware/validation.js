@@ -7,12 +7,15 @@ const schema = {
     phone: Joi.string().min(6).max(20).trim().required(),
   }).unknown(false),
   edit: Joi.object({
-    name: Joi.string().alphanum().min(3).max(20),
+    name: Joi.string().min(3).max(20),
     email: Joi.string().email(),
     phone: Joi.string().min(6).max(20),
   })
     .or("name", "phone", "email")
     .unknown(false),
+  fav: Joi.object({
+    favorite: Joi.boolean().required(),
+  }).unknown(false),
 };
 
 const getError = (error, type) => {
@@ -27,8 +30,7 @@ const getError = (error, type) => {
     .map((detail) => detail.message);
 
   if (unknownField.length > 0) return `Fields: ${unknownField}`;
-  if (requiredFields.length > 0)
-    return `Missing fields ${requiredFields}`;
+  if (requiredFields.length > 0) return `Missing fields ${requiredFields}`;
   if (fieldsString.length > 0) return `Incorrect field values: ${fieldsString}`;
 
   if (type === "edit") {
@@ -53,4 +55,12 @@ const editValidation = ({ body }, res, next) => {
   next();
 };
 
-module.exports = { addValidation, editValidation };
+const favValidation = ({ body }, res, next) => {
+  const { error } = schema.fav.validate(body);
+
+  if (error) return res.status(400).json({ message: getError(error, "fav") });
+
+  next();
+};
+
+module.exports = { addValidation, editValidation, favValidation };
