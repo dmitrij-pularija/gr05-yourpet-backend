@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const ctrlWrapper = require("../../decorators/ctrlWrapper");
+const authenticate = require("../../middleware/authenticate");
 
 const {
   list,
@@ -15,13 +16,18 @@ const {
   addValidation,
   editValidation,
   favValidation,
-} = require("../../middleware/validation.js");
+} = require("../../middleware/contactsValidation.js");
 
-router.get("/", ctrlWrapper(list));
-router.get("/:contactId", ctrlWrapper(get));
-router.post("/", addValidation, ctrlWrapper(add));
-router.delete("/:contactId", ctrlWrapper(del));
-router.put("/:contactId", editValidation, ctrlWrapper(edit));
-router.patch("/:contactId/favorite", favValidation, ctrlWrapper(fav));
+router.get("/", authenticate, ctrlWrapper(list));
+router.get("/:contactId", authenticate, ctrlWrapper(get));
+router.post("/", authenticate, addValidation, ctrlWrapper(add));
+router.delete("/:contactId", authenticate, ctrlWrapper(del));
+router.put("/:contactId", authenticate, editValidation, ctrlWrapper(edit));
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  favValidation,
+  ctrlWrapper(fav)
+);
 
 module.exports = router;
