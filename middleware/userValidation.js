@@ -4,7 +4,7 @@ const getError = require("../utilities/validationError");
 
 const schema = {
   register: Joi.object({
-    name: Joi.string().min(3).max(20).required(),
+    name: Joi.string().min(3).max(20),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(20).required(),
     subscription: Joi.string().valid("starter", "pro", "business"),
