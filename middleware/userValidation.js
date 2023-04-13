@@ -1,5 +1,5 @@
 const Joi = require("joi");
-
+const { unlinkSync } = require("fs");
 const getError = require("../utilities/validationError");
 
 const schema = {
@@ -16,6 +16,11 @@ const schema = {
   subscription: Joi.object({
     subscription: Joi.string().valid("starter", "pro", "business").required(),
   }).unknown(false),
+  avatar: Joi.object({
+      fieldname: Joi.string().valid('avatar').required(),
+      mimetype: Joi.string().valid('image/jpeg', 'image/png', 'image/jpeg', 'image/gif').required().messages({ 'any.only': 'The file format must be jpg or png',}),
+      size: Joi.number().max(1 * 1024 * 1024).required().messages({ 'number.max': 'The file size must not exceed 1 MB',}),
+  }).required().unknown(true),
 };
 
 const registerValidation = ({ body }, res, next) => {
@@ -44,8 +49,18 @@ const subscriptionValidation = ({ body }, res, next) => {
   next();
 };
 
+const avatarValidation = ({ file }, res, next) => {
+  const { error } = schema.avatar.validate(file);
+  if (error) {
+    unlinkSync(file.path);
+    return res.status(400).json({ message: getError(error, "avatar") });
+  }
+  next();
+};
+
 module.exports = {
   registerValidation,
   loginValidation,
   subscriptionValidation,
+  avatarValidation,
 };

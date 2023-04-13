@@ -6,7 +6,6 @@ const user = new Schema(
       type: String,
       minlength: 3,
       maxlength: 20,
-      unique: true,
     },
     password: {
       type: String,
@@ -23,6 +22,9 @@ const user = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: {
+      type: String,
+    },
     token: {
       type: String,
       default: null,
@@ -34,10 +36,8 @@ const user = new Schema(
 user.post("save", (error, data, next) => {
   const field = Object.keys(error.keyPattern)[0];
   const message =
-    field === "name"
-      ? "Name in use."
-      : field === "email"
-      ? "Email in use."
+      field === "email"
+      ? "Email in use"
       : error.message;
   const responseError = {
     status: 409,

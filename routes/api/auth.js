@@ -2,10 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const authenticate = require("../../middleware/authenticate");
+const upload = require("../../middleware/upload");
+
 const {
   registerValidation,
   loginValidation,
   subscriptionValidation,
+  avatarValidation,
 } = require("../../middleware/userValidation");
 
 const authWrapper = require("../../decorators/authWrapper");
@@ -15,6 +18,7 @@ const {
   login,
   subscription,
   current,
+  avatar,
   logout,
 } = require("../../controllers/auth.js");
 
@@ -25,6 +29,13 @@ router.patch(
   authenticate,
   subscriptionValidation,
   authWrapper(subscription)
+);
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  avatarValidation,
+  authWrapper(avatar)
 );
 router.get("/current", authenticate, authWrapper(current));
 router.post("/logout", authenticate, authWrapper(logout));

@@ -6,20 +6,17 @@ const contacts = new Schema(
       type: String,
       minlength: 3,
       maxlength: 20,
-      unique: true,
       required: [true, "Set name for contact"],
     },
     email: {
       type: String,
       required: [true, "Set email for contact"],
-      unique: true,
     },
     phone: {
       type: String,
       minlength: 6,
       maxlength: 20,
       required: [true, "Set phone for contact"],
-      unique: true,
     },
     favorite: {
       type: Boolean,
@@ -34,20 +31,8 @@ const contacts = new Schema(
 );
 
 contacts.post("save", (error, data, next) => {
-  const field = Object.keys(error.keyPattern)[0];
-  const message =
-    field === "name"
-      ? "Name must be unique."
-      : field === "email"
-      ? "Email must be unique."
-      : field === "phone"
-      ? "Phone must be unique."
-      : error.message;
-  const responseError = {
-    status: 400,
-    message: message,
-  };
-  return next(responseError);
+  error.status = 400;
+  next();
 });
 
 const Contacts = model("contacts", contacts);
