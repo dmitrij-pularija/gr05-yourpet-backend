@@ -1,25 +1,30 @@
 const { isValidObjectId } = require("mongoose");
+const HttpError = require("../utilities/httpError");
+const FindDuplicates = require("../utilities/duplicate");
 
 const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
+    const { name } = ctrl;
+    const {
+      body,
+      user: { _id },
+      params: { contactId },
+    } = req;
     try {
-      if (
-        ctrl.name !== "add" &&
-        ctrl.name !== "list" &&
-        !isValidObjectId(req.params.contactId)
-      )
-        return res.status(404).json({ message: "Not Found" });
+      if (name !== "add" && name !== "list" && !isValidObjectId(contactId))
+        throw HttpError(404);
+      if (name === "add") await FindDuplicates(body, _id);
+      if (name === "edit") await FindDuplicates(body, _id, contactId);
 
       const result = await ctrl(req, res, next);
 
-      if (!result) return res.status(404).json({ message: "Not Found" });
-      if (result.length === 0 && ctrl.name === "list")
-        return res.status(404).json({ message: "Not Found" });
+      if (!result) throw HttpError(404);
+      if (result.length === 0 && name === "list") throw HttpError(404);
       if (res.headersSent) return;
-      if (ctrl.name === "del") {
+      if (name === "del") {
         return res
           .status(200)
-          .json({ message: `Contact with id:${req.params.contactId} deleted` });
+          .json({ message: `Contact with id:${contactId} deleted` });
       } else {
         return res.status(200).json(result);
       }
