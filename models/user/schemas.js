@@ -29,16 +29,22 @@ const user = new Schema(
       type: String,
       default: null,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },  
+    verificationToken: {
+      type: String,
+      default: null,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: false }
 );
 
 user.post("save", (error, data, next) => {
   const field = Object.keys(error.keyPattern)[0];
-  const message =
-      field === "email"
-      ? "Email in use"
-      : error.message;
+  const message = field === "email" ? "Email in use" : error.message;
   const responseError = {
     status: 409,
     message: message,

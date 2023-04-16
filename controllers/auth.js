@@ -1,5 +1,7 @@
 const {
   createUser,
+  verifyEmail,
+  resendVerifyEmail,
   loginUser,
   updateSubscription,
   getCurrentUser,
@@ -8,10 +10,34 @@ const {
 } = require("../models/user/operations.js");
 
 const registr = async ({ body }) => await createUser(body);
-const login = async ({ body }) => await loginUser(body);
-const subscription = async (req) => await updateSubscription(req);
-const avatar = async (req) => await changeAvatar(req);
-const current = async (user) => await getCurrentUser(user);
-const logout = async (user) => await logoutUser(user);
 
-module.exports = { registr, login, current, avatar, logout, subscription };
+const verify = async ({ params: { verificationToken } }) =>
+  await verifyEmail(verificationToken);
+
+const resendVerify = async ({ body: { email } }) =>
+  await resendVerifyEmail(email);
+
+const login = async ({ body: { email, password } }) =>
+  await loginUser(email, password);
+
+const subscription = async ({ body: { subscription }, user: { _id } }) =>
+  await updateSubscription(subscription, _id);
+
+const avatar = async ({ file: { path: tempUpload }, user: { _id } }) =>
+  await changeAvatar(tempUpload, _id);
+
+const current = async ({ user: { name, email, subscription, avatarURL } }) =>
+  await getCurrentUser(name, email, subscription, avatarURL);
+  
+const logout = async ({ user: { _id } }) => await logoutUser(_id);
+
+module.exports = {
+  registr,
+  verify,
+  resendVerify,
+  login,
+  current,
+  avatar,
+  logout,
+  subscription,
+};
