@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
@@ -25,7 +25,7 @@ const createUser = async (body) => {
     verificationToken,
   });
 
-  await sendEmail(verificationToken, email);
+  await sendEmail(verificationToken, email, name);
 
   return { user: { name, email, subscription, avatarURL } };
 };
@@ -46,7 +46,7 @@ const resendVerifyEmail = async (email) => {
   if (!user) throw HttpError(404, "User not found");
   if (user.verify) throw HttpError(400, "Verification has already been passed");
 
-  await sendEmail(user.verificationToken, email);
+  await sendEmail(user.verificationToken, email, user.name);
 
   return { message: "Verification email sent" };
 };
