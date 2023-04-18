@@ -3,7 +3,7 @@ const app = require("../app");
 const mongoose = require("mongoose");
 const { DB_HOST } = process.env;
 
-describe("Tests for login controller /api/users/login", () => {
+describe("Tests for login controller /users/login", () => {
   beforeAll(async () => {
     await mongoose
       .connect(DB_HOST)
@@ -24,7 +24,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(201);
     expect(response.body.token).toBeDefined();
     expect(response.body.user).toBeDefined();
@@ -39,7 +39,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "invalid@example.com",
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(401);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -51,7 +51,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: "incorrect_password",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(401);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -63,7 +63,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: 11111111,
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -77,7 +77,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: null,
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -91,7 +91,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: undefined,
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -103,7 +103,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: true,
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -117,7 +117,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: {},
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -131,7 +131,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: [],
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -145,7 +145,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: "example@example.com",
       password: () => {},
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -157,7 +157,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: 11111111,
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -171,7 +171,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: null,
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -185,7 +185,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: undefined,
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -197,7 +197,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: true,
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -211,7 +211,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: {},
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -225,7 +225,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: [],
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -239,7 +239,7 @@ describe("Tests for login controller /api/users/login", () => {
       email: () => {},
       password: "1111111",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -250,7 +250,7 @@ describe("Tests for login controller /api/users/login", () => {
     const body = {
       password: "incorrect_password",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -261,7 +261,7 @@ describe("Tests for login controller /api/users/login", () => {
     const body = {
       email: "example@example.com",
     };
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -270,7 +270,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with empty object", async () => {
     const body = {};
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -279,7 +279,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with empty array", async () => {
     const body = [];
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -288,7 +288,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with empty string", async () => {
     const body = "";
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -297,7 +297,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with bulean", async () => {
     const body = false;
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -306,7 +306,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with undefined", async () => {
     const body = undefined;
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
@@ -315,7 +315,7 @@ describe("Tests for login controller /api/users/login", () => {
 
   test("Test login with with null", async () => {
     const body = null;
-    const response = await request(app).post("/api/users/login").send(body);
+    const response = await request(app).post("/users/login").send(body);
     expect(response.statusCode).toBe(400);
     expect(response.body.token).toBeUndefined();
     expect(response.body.user).toBeUndefined();
