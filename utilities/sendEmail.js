@@ -12,7 +12,7 @@ const sendEmail = async (token, email, name = "") => {
     html: `
       ${name && `<p>Hi ${name}</p>`}
       <p>Please click the button below to verify your email address:</p>
-      <a href="${BASE_URL}/api/users/verify/${token}">
+      <a href="${BASE_URL}/users/verify/${token}">
         <button style="background-color: #007bff; color: #fff; padding: 10px 20px; border: none;  border-radius: 5px; cursor: pointer;">
           Verify Email Address
         </button>
