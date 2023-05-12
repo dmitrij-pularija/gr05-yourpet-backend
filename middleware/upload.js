@@ -1,6 +1,17 @@
+const cloudinary = require('cloudinary').v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require("multer");
-const path = require("path");
+// const path = require("path");
 const HttpError = require("../utilities/httpError");
+
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET,
+  secure: true 
+});
 
 const MIME_TYPES = {
   "image/jpg": "jpg",
@@ -10,14 +21,14 @@ const MIME_TYPES = {
 };
 const MAX_SIZE = 1 * 1024 * 1024;
 
-const tempDir = path.join(__dirname, "../", "tmp");
+// const tempDir = path.join(__dirname, "../", "tmp");
 
-const multerConfig = multer.diskStorage({
-  destination: tempDir,
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+// const multerConfig = multer.diskStorage({
+//   destination: tempDir,
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname);
+//   },
+// });
 
 const fileFilter = ({ headers }, { mimetype }, cb) => {
   const fileSize = parseInt(headers["content-length"]);
@@ -28,8 +39,21 @@ const fileFilter = ({ headers }, { mimetype }, cb) => {
   cb(null, true);
 };
 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "avatars",
+    allowedFormats: ["jpg", "png", "webp"],
+    transformation: [{ width: 600, crop: "scale" }, { fetch_format: "auto" }],
+  },
+  filename: (req, file, cb) => {
+    console.log("Setting filename to:", file.originalname);
+    cb(null, file.originalname);
+  },
+});
+
 const upload = multer({
-  storage: multerConfig,
+  storage,
   limits: { fileSize: MAX_SIZE },
   fileFilter: fileFilter,
 });
