@@ -1,7 +1,12 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+// import swaggerUi from "swagger-ui-express";
+// import swaggerDocument from "./swagger.json" assert { type: "json" };
 require("dotenv").config();
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 const authRouter = require("./routes/api/auth");
 // const noticesRouter = require("./routes/notices");
@@ -23,6 +28,7 @@ app.use("/api/auth", authRouter);
 // app.use("/api/pets", petsRouter);
 // app.use("/api/friends", friendsRouter);
 // app.use("/api/news", newsRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((_, res, __) => {
   res.status(404).json({ message: "Not found" });

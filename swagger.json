@@ -1,0 +1,1556 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"version": "1.0.9",
+
+		"title": "Swagger YourPet",
+		"description": "This is the server of the YourPet website."
+	},
+	"consumes": ["appliation/json", "multipart/form-data"],
+	"produces": ["application/json"],
+	"servers": [{ "url": "" }],
+	"tags": [
+		{
+			"name": "Auth",
+			"description": "Authorization endpoints"
+		},
+		{
+			"name": "User",
+			"description": "Users endpoints"
+		},
+		{
+			"name": "Notices",
+			"description": "Notices endpoints"
+		},
+		{
+			"name": "Friends",
+			"description": "Friend endpoints"
+		},
+		{
+			"name": "News",
+			"description": "News endpoints"
+		},
+		{
+			"name": "Pets",
+			"description": "Pets endpoints"
+		}
+	],
+
+	"paths": {
+		"/auth/register": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Registration",
+				"parameters": [],
+
+				"requestBody": {
+					"description": "Registration's object",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegistrationRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegistrationResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation error",
+						"content": {}
+					},
+					"409": {
+						"description": "Email in use",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Login",
+				"parameters": [],
+
+				"requestBody": {
+					"description": "Login's object",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation error",
+						"content": {}
+					},
+					"404": {
+						"description": "Email or password is wrong",
+						"content": {}
+					},
+					"401": {
+						"description": "Email or password is wrong",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/auth/refresh": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Refresh token",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"requestBody": {
+					"description": "Refresh token",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RefreshRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RefreshResponse"
+								}
+							}
+						}
+					},
+
+					"403": {
+						"description": "Token invalid",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/auth/logout": {
+			"post": {
+				"tags": ["Auth"],
+
+				"summary": "Logout",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LogoutRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "Deleted successfully"
+					}
+				}
+			}
+		},
+		"/user/current": {
+			"get": {
+				"tags": ["User"],
+				"summary": "User current",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CurrentResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/update": {
+			"patch": {
+				"tags": ["User"],
+				"summary": "UpdateUserInfo",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"requestBody": {
+					"description": "UserInfo object",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UpdateResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation error",
+						"content": {}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/user/avatars": {
+			"patch": {
+				"tags": ["User"],
+				"summary": "Avatar",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"requestBody": {
+					"description": "UserInfo object",
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/AvatarRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"appliation/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AvatarResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/favorite": {
+			"get": {
+				"tags": ["User"],
+				"summary": "Favorite",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FavoriteResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/favorite/{id}": {
+			"post": {
+				"tags": ["User"],
+				"summary": "Add Favorite",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"responses": {
+					"201": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AddFavoriteResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "This entry has already been added to the favorites list",
+						"content": {}
+					},
+					"404": {
+						"description": "This entry is not found",
+						"content": {}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["User"],
+				"summary": "Delete Favorite",
+				"parameters": [],
+				"security": [{ "Bearer": [] }],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeleteFavoriteResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "This entry is not in your favorites list",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/notices": {
+			"get": {
+				"tags": ["Notices"],
+				"summary": "Get notices by category",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Notices"],
+				"summary": "Ads notices to the selected category",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/notices/find": {
+			"get": {
+				"tags": ["Notices"],
+				"summary": "Find notice by title",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"schema": {
+							"type": "string",
+							"minLength": "2",
+							"maxLength": "16"
+						},
+						"description": "The value is assigned to the title",
+						"required": true
+					}
+				],
+
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FindeTitleResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/notices/user": {
+			"get": {
+				"tags": ["Notices"],
+				"summary": "Notices by authorized user",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"schema": {
+							"type": "string",
+							"minLength": "2",
+							"maxLength": "16"
+						},
+						"description": "The value is assigned to the title",
+						"required": true
+					}
+				],
+
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FindeTitleResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/notices/{id}": {
+			"get": {
+				"tags": ["Notices"],
+				"summary": "Get full info about notice",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"schema": {
+							"type": "string",
+							"minLength": "2",
+							"maxLength": "16"
+						},
+						"description": "The value is assigned to the title",
+						"required": true
+					}
+				],
+
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FindeTitleResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Notices"],
+				"summary": "Delete notice by authorized user",
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"schema": {
+							"type": "string",
+							"minLength": "2",
+							"maxLength": "16"
+						},
+						"description": "The value is assigned to the title",
+						"required": true
+					}
+				],
+
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FindeTitleResponse"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/friends": {
+			"get": {
+				"tags": ["Friends"],
+				"summary": "Get friends or sponsor",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/news": {
+			"get": {
+				"tags": ["News"],
+				"summary": "Get news",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/news/title": {
+			"get": {
+				"tags": ["News"],
+				"summary": "Found news by title",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/pets": {
+			"post": {
+				"tags": ["Pets"],
+				"summary": "Add your pet",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/pets/{id}": {
+			"delete": {
+				"tags": ["Pets"],
+				"summary": "Delete pet by authorized user",
+				"parameters": [],
+
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NoticesRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NoticesResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"content": {}
+					}
+				}
+			}
+		}
+	},
+
+	"components": {
+		"schemas": {
+			"RegistrationRequest": {
+				"type": "object",
+				"required": ["email", "password"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"minLength": "6",
+						"maxLength": "16",
+						"pattern": " ^ ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
+						"example": "qWerty123"
+					}
+				}
+			},
+			"RegistrationResponse": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer"
+						},
+						"email": {
+							"type": "string",
+							"format": "email"
+						},
+						"name": {
+							"type": "string"
+						},
+						"birthday": {
+							"type": "string",
+							"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+						},
+						"phone": {
+							"type": "string",
+							"pattern": "^(/^\\+380\\d{9}$/)$"
+						},
+						"city": {
+							"type": "string",
+							"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+						},
+						"image": {
+							"type": "string",
+							"format": "binary"
+						}
+					}
+				},
+				"example": [
+					{
+						"user": {
+							"id": "645624fbd1c0ebc66ccdb00a",
+							"email": "heyekep@soombo.com",
+							"name": "Name",
+							"birthday": "11.11.1131",
+							"phone": "+380000000000",
+							"city": "Sumny",
+							"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+						}
+					}
+				]
+			},
+			"LoginRequest": {
+				"type": "object",
+				"required": ["email", "password"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"minLength": "6",
+						"maxLength": "16",
+						"pattern": " ^ (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,16}) $",
+						"example": "qWerty123"
+					}
+				}
+			},
+			"LoginResponse": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"token": {
+							"type": "string"
+						},
+						"refreshToken": {
+							"type": "string"
+						},
+						"user": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string"
+								},
+								"email": {
+									"type": "string",
+									"format": "email"
+								},
+								"name": {
+									"type": "string"
+								},
+								"birthday": {
+									"type": "string",
+									"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+								},
+								"phone": {
+									"type": "string",
+									"pattern": "^(/^\\+380\\d{9}$/)$"
+								},
+								"city": {
+									"type": "string",
+									"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+								},
+								"image": {
+									"type": "string",
+									"format": "binary"
+								}
+							}
+						}
+					}
+				},
+				"example": [
+					{
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
+						"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno",
+
+						"user": {
+							"id": "645624fbd1c0ebc66ccdb00a",
+							"email": "heyekep@soombo.com",
+							"name": "Name",
+							"birthday": "11.11.1131",
+							"phone": "+380000000000",
+							"city": "Sumny",
+							"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889"
+						}
+					}
+				]
+			},
+			"RefreshRequest": {
+				"type": "object",
+				"required": ["refreshToken"],
+				"properties": {
+					"refreshToken": {
+						"type": "string",
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+					}
+				}
+			},
+			"RefreshResponse": {
+				"type": "object",
+				"properties": {
+					"token": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"example": [
+					{
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRiNmQ5NzU2YjljMzc2OTg0YjE0MDgiLCJzZXNzaW9uS2V5IjoiNGEwZTQ1M2EtN2NiMS00ZTgwLTllMTgtYmU0ZTQ3YzJhYjI1IiwiaWF0IjoxNjgyNjczOTI1LCJleHAiOjE2ODI2NzU3MjV9.nd49ejNfSriW6S3dSDAPfUpscukVtgQvN1fsd9y2uFc",
+						"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDU2MjRmYmQxYzBlYmM2NmNjZGIwMGEiLCJzZXNzaW9uS2V5IjoiYzFjMjMzNTYtNWI3Yy00MjFkLWFmNzAtYjM5YjE2OGIxNDk3IiwiaWF0IjoxNjgzNDExMjg0LCJleHAiOjE4NjM0MTEyODR9.0QXD5iPujHoow3aExltvoAO208s5Z5h56pmg8Oj-mno"
+					}
+				]
+			},
+			"LogoutRequest": {
+				"type": "object",
+				"required": ["id"],
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "6453bbe29b2611f1d181cb07"
+					}
+				}
+			},
+			"CurrentResponse": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"name": {
+						"type": "string"
+					},
+					"birthday": {
+						"type": "string",
+						"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^(/^\\+380\\d{9}$/)$"
+					},
+					"city": {
+						"type": "string",
+						"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+					},
+					"image": {
+						"type": "string",
+						"format": "binary"
+					},
+					"favorite": [
+						{
+							"_id": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"breed": {
+								"type": "string"
+							},
+							"location": {
+								"type": "string"
+							},
+							"sex": {
+								"type": "string",
+								"example": "male or female"
+							},
+							"category": {
+								"type": "string"
+							},
+							"price": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"comments": {
+								"type": "string"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							}
+						}
+					],
+					"pets": []
+				},
+				"example": {
+					"id": "645624fbd1c0ebc66ccdb00a",
+					"email": "heyekep@soombo.com",
+					"name": "Name",
+					"birthday": "11.11.1131",
+					"phone": "+380000000000",
+					"city": "Sumny",
+					"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+					"favorite": [
+						{
+							"_id": "6454eb3f52f8c3f6336741b1",
+							"title": "Adorable kitten",
+							"name": "Snowball",
+							"birthday": "15.05.2021",
+							"breed": "Siamese",
+							"location": "London",
+							"sex": "female",
+							"category": "sell",
+							"price": "800$",
+							"email": "user3@net.com",
+							"phone": "+380661234567",
+							"comments": "She is litter box trained and loves to cuddle!",
+							"image": "https://source.unsplash.com/random?animals&cat&dog"
+						}
+					],
+					"pets": []
+				}
+			},
+			"UpdateRequest": {
+				"type": "object",
+				"enum": ["name", "email", "birthday", "phone", "city"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"name": {
+						"type": "string"
+					},
+					"birthday": {
+						"type": "string",
+						"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^(/^\\+380\\d{9}$/)$"
+					},
+					"city": {
+						"type": "string",
+						"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+						"example": "Lviv"
+					}
+				}
+			},
+			"UpdateResponse": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"type": "object",
+						"properties": {
+							"_id": {
+								"type": "string"
+							},
+							"passwordHash": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"city": {
+								"type": "string",
+								"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$",
+								"example": "Lviv"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							},
+							"favorite": [],
+							"pets": [],
+							"sessionKey": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"example": [
+					{
+						"_id": "645624fbd1c0ebc66ccdb00a",
+						"passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+						"name": "Name",
+						"email": "heyekep@soombo.com",
+						"birthday": "11.11.1131",
+						"phone": "+380000000000",
+						"city": "Sumny",
+						"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+						"favorite": [],
+						"pets": [],
+						"sessionKey": "5037cd19-9d58-4844-b413-ff237c100a45"
+					}
+				]
+			},
+			"AvatarRequest": {
+				"type": "object",
+				"properties": {
+					"image": {
+						"type": "string",
+						"format": "binary"
+					}
+				}
+			},
+			"AvatarResponse": {
+				"type": "object",
+				"properties": {
+					"image": {
+						"type": "string",
+						"format": "binary"
+					}
+				},
+				"example": [
+					{
+						"image": "https://res.cloudinary.com/dosrxpfu8/image/upload/v1683411947/iz0dnt2broomqznxmgjv.png"
+					}
+				]
+			},
+			"FavoriteResponse": {
+				"type": "object",
+				"properties": {
+					"user": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"city": {
+								"type": "string",
+								"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							},
+							"favorite": [
+								{
+									"$ref": "#/components/schemas/FindeTitleResponse"
+								}
+							],
+							"pets": [],
+							"notices": []
+						}
+					}
+				},
+				"example": [
+					{
+						"user": {
+							"id": "645624fbd1c0ebc66ccdb00a",
+							"email": "heyekep@soombo.com",
+							"name": "Name",
+							"birthday": "11.11.1131",
+							"phone": "+380000000000",
+							"city": "Sumny",
+							"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+							"favorite": [],
+							"pets": [],
+							"notices": []
+						}
+					}
+				]
+			},
+			"AddFavoriteResponse": {
+				"type": "object",
+				"properties": {
+					"user": {
+						"type": "object",
+						"properties": {
+							"_id": {
+								"type": "string"
+							},
+							"passwordHash": {
+								"type": "string"
+							},
+
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"city": {
+								"type": "string",
+								"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							},
+							"favorite": [
+								{
+									"$ref": "#/components/schemas/Favorite"
+								}
+							],
+							"pets": [],
+							"sessionKey": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"example": [
+					{
+						"user": {
+							"_id": "645624fbd1c0ebc66ccdb00a",
+							"passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+							"name": "Name",
+							"email": "heyekep@soombo.com",
+							"birthday": "00.00.0000",
+							"phone": "+380000000000",
+							"city": "City",
+							"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+							"favorite": [
+								{
+									"_id": "6454eb3f52f8c3f6336741b1",
+									"title": "Adorable kitten",
+									"name": "Snowball",
+									"birthday": "15.05.2021",
+									"breed": "Siamese",
+									"location": "London",
+									"sex": "female",
+									"category": "sell",
+									"price": "800$",
+									"email": "user3@net.com",
+									"phone": "+380661234567",
+									"comments": "She is litter box trained and loves to cuddle!",
+									"image": "https://source.unsplash.com/random?animals&cat&dog"
+								}
+							],
+							"pets": [],
+							"sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
+						}
+					}
+				]
+			},
+			"DeleteFavoriteResponse": {
+				"type": "object",
+				"properties": {
+					"user": {
+						"type": "object",
+						"properties": {
+							"_id": {
+								"type": "string"
+							},
+							"passwordHash": {
+								"type": "string"
+							},
+
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"city": {
+								"type": "string",
+								"pattern": "^(/^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$/)$"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							},
+							"favorite": [
+								{
+									"$ref": "#/components/schemas/Favorite"
+								}
+							],
+							"pets": [],
+							"sessionKey": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"example": [
+					{
+						"user": {
+							"_id": "645624fbd1c0ebc66ccdb00a",
+							"passwordHash": "$2b$10$6ntmCd7hryZFRxEcm5Vuru2nDDSNGKGwEA3LXr0OQW7bOxIfCV/iq",
+							"name": "Name",
+							"email": "heyekep@soombo.com",
+							"birthday": "00.00.0000",
+							"phone": "+380000000000",
+							"city": "City",
+							"image": "//www.gravatar.com/avatar/3155b452c8eec41ede4545e82babd889",
+							"favorite": [],
+							"pets": [],
+							"sessionKey": "598e9cae-19d4-4503-8924-276912e42b6f"
+						}
+					}
+				]
+			},
+			"NoticesRequest": {
+				"type": "object",
+				"required": ["category"],
+				"properties": {
+					"category": {
+						"type": "string",
+						"enum": ["sell", "lost-found", "for-free"]
+					}
+				}
+			},
+			"NoticesResponse": {
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"birthday": {
+						"type": "string",
+						"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+					},
+					"breed": {
+						"type": "string"
+					},
+					"sex": {
+						"type": "string",
+						"example": "male or female"
+					},
+					"location": {
+						"type": "string"
+					},
+					"category": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^(/^\\+380\\d{9}$/)$"
+					},
+					"comments": {
+						"type": "string"
+					},
+					"image": {
+						"type": "string",
+						"format": "binary"
+					}
+				},
+				"example": [
+					{
+						"_id": "6454eb3f52f8c3f6336741b8",
+						"title": "Friendly cat",
+						"name": "Socks",
+						"birthday": "15.03.2019",
+						"breed": "Domestic Shorthair",
+						"location": "New York",
+						"sex": "male",
+						"category": "lost-found",
+						"email": "jane@net.com",
+						"phone": "+14155552678",
+						"comments": "Socks is very social and loves to play!",
+						"image": "https://source.unsplash.com/random?animals&cat&dog"
+					}
+				]
+			},
+			"FindeTitleResponse": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"_id": {
+							"type": "string"
+						},
+						"title": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"birthday": {
+							"type": "string",
+							"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+						},
+						"breed": {
+							"type": "string"
+						},
+						"sex": {
+							"type": "string",
+							"example": "male or female"
+						},
+						"location": {
+							"type": "string"
+						},
+						"category": {
+							"type": "string"
+						},
+						"email": {
+							"type": "string",
+							"format": "email"
+						},
+						"phone": {
+							"type": "string",
+							"pattern": "^(/^\\+380\\d{9}$/)$"
+						},
+						"comments": {
+							"type": "string"
+						},
+						"image": {
+							"type": "string",
+							"format": "binary"
+						}
+					}
+				},
+				"example": [
+					{
+						"_id": "637216768f895fcabfd83e67",
+						"title": "Graceful cat",
+						"name": "Luna",
+						"birthday": "20.03.2021",
+						"breed": "Persian",
+						"location": "Paris",
+						"sex": "female",
+						"category": "sell",
+						"price": "1200$",
+						"email": "user9@net.com",
+						"phone": "+380661234567",
+						"comments": "She has beautiful long fur and is very graceful!",
+						"image": "https://source.unsplash.com/random?animals&cat&dog"
+					}
+				]
+			},
+
+			"Favorite": {
+				"type": "object",
+				"properties": {
+					"favorite": [
+						{
+							"_id": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"birthday": {
+								"type": "string",
+								"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+							},
+							"breed": {
+								"type": "string"
+							},
+							"location": {
+								"type": "string"
+							},
+							"sex": {
+								"type": "string",
+								"example": "male or female"
+							},
+							"category": {
+								"type": "string"
+							},
+							"price": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"phone": {
+								"type": "string",
+								"pattern": "^(/^\\+380\\d{9}$/)$"
+							},
+							"comments": {
+								"type": "string"
+							},
+							"image": {
+								"type": "string",
+								"format": "binary"
+							}
+						}
+					]
+				}
+			},
+			"Notices": {
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"birthday": {
+						"type": "string",
+						"pattern": "^(/^\\d{2}\\.\\d{2}\\.\\d{4}$/)$"
+					},
+					"breed": {
+						"type": "string"
+					},
+					"sex": {
+						"type": "string",
+						"example": "male or female"
+					},
+					"location": {
+						"type": "string"
+					},
+					"category": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string",
+						"format": "email"
+					},
+					"phone": {
+						"type": "string",
+						"pattern": "^(/^\\+380\\d{9}$/)$"
+					},
+					"comments": {
+						"type": "string"
+					},
+					"image": {
+						"type": "string",
+						"format": "binary"
+					}
+				}
+			}
+		}
+	},
+
+	"securitySchemes": {
+		"Bearer": {
+			"type": "http",
+			"scheme": "bearer",
+			"bearerFormat": "JWT"
+		}
+	}
+}
