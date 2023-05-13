@@ -18,16 +18,16 @@ const createUser = async (body) => {
 	const avatarURL = gravatar.url(body.email, { protocol: "http", s: "250" });
 	const password = await bcrypt.hash(body.password, 10);
 	const verificationToken = uuidv4();
-	const { name, email, subscription } = await User.create({
+	const { _id, name, email } = await User.create({
 		...body,
 		password,
 		avatarURL,
 		verificationToken,
 	});
-
+	const token = jwt.sign({ id: _id }, SECRET_KEY, { expiresIn: "23h" });
 	// await sendEmail(verificationToken, email, name);
 
-	return { user: { name, email, subscription, avatarURL } };
+	return { token, user: { name, email, avatarURL } };
 };
 
 const verifyEmail = async (verificationToken) => {
@@ -59,13 +59,10 @@ const loginUser = async (email, password) => {
 	const passwordCompare = await bcrypt.compare(password, user.password);
 	if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
 	const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "23h" });
-	const { name, subscription, avatarURL } = await User.findByIdAndUpdate(
-		user._id,
-		{
-			token,
-		}
-	);
-	return { token, user: { name, email, subscription, avatarURL } };
+	const { name, avatarURL } = await User.findByIdAndUpdate(user._id, {
+		token,
+	});
+	return { token, user: { name, email, avatarURL } };
 };
 
 const logoutUser = async (_id) =>
