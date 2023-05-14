@@ -26,7 +26,9 @@ app.use("/api/pets", petsRouter);
 // app.use("/api/friends", friendsRouter);
 // app.use("/api/news", newsRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+app.use('/', (req, res) => {
+  res.redirect('/api-docs');
+});
 app.use((_, res, __) => {
   res.status(404).json({ message: "Not found" });
 });

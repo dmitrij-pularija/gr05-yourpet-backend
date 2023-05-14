@@ -6,14 +6,14 @@
 		"title": "Swagger YourPet",
 		"description": "This is the server of the YourPet website."
 	},
-	"consumes": ["appliation/json", "multipart/form-data"],
+	"consumes": ["application/json", "multipart/form-data"],
 	"produces": ["application/json"],
 	"servers": [
 		{
-			"url": "https://yourpet-api.onrender.com"
+			"url": "https://yourpet-api.onrender.com/api"
 		},
 		{
-			"url": "http://localhost:3001"
+			"url": "http://localhost:3001/api"
 		}
 	],
 	"tags": [
