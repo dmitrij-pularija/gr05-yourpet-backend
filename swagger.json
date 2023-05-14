@@ -365,7 +365,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -396,7 +396,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -567,7 +567,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -600,7 +600,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -633,7 +633,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -666,7 +666,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost/found; in good hands",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -1318,7 +1318,7 @@
 				"properties": {
 					"category": {
 						"type": "string",
-						"enum": ["sell", "lost/found", "in good hands"]
+						"enum": ["sell", "lost/found", "In good hands"]
 					}
 				}
 			},

@@ -56,7 +56,7 @@ const getNoticeCategoryValidation = ({ query }, res, next) => {
 	if (error) {
 		return res.status(400).json({
 			error:
-				'Invalid category, please select one of: ["sell", "lost-found", "for-free"]',
+				'Invalid category, please select one of: ["sell", "lost/found", "In good hands"]',
 		});
 	}
 	next();
