@@ -6,7 +6,7 @@ const upload = require("../../middleware/upload");
 
 const {
 	registerValidation,
-	verifyValidation,
+	// verifyValidation,
 	loginValidation,
 	updateValidation,
 	avatarValidation,
@@ -16,8 +16,8 @@ const authWrapper = require("../../decorators/authWrapper");
 
 const {
 	registr,
-	verify,
-	resendVerify,
+	// verify,
+	// resendVerify,
 	login,
 	update,
 	current,
@@ -26,8 +26,8 @@ const {
 } = require("../../controllers/auth.js");
 
 router.post("/register", registerValidation, authWrapper(registr));
-router.get("/verify/:verificationToken", authWrapper(verify));
-router.post("/verify", verifyValidation, authWrapper(resendVerify));
+// router.get("/verify/:verificationToken", authWrapper(verify));
+// router.post("/verify", verifyValidation, authWrapper(resendVerify));
 router.post("/login", loginValidation, authWrapper(login));
 router.patch("/update", authenticate, updateValidation, authWrapper(update));
 

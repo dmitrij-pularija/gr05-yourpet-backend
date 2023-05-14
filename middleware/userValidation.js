@@ -12,9 +12,6 @@ const schema = {
 		password: Joi.string().pattern(passRegexp).required(),
 		// subscription: Joi.string().valid("starter", "pro", "business"),
 	}).unknown(false),
-	verify: Joi.object({
-		email: Joi.string().email().pattern(emailRegexp).required(),
-	}).unknown(false),
 	login: Joi.object({
 		email: Joi.string().email().pattern(emailRegexp).required(),
 		password: Joi.string().pattern(passRegexp).required(),
@@ -50,14 +47,14 @@ const registerValidation = ({ body }, res, next) => {
 	next();
 };
 
-const verifyValidation = ({ body }, res, next) => {
-	const { error } = schema.verify.validate(body);
+// const verifyValidation = ({ body }, res, next) => {
+// 	const { error } = schema.verify.validate(body);
 
-	if (error)
-		return res.status(400).json({ message: getError(error, "verify") });
+// 	if (error)
+// 		return res.status(400).json({ message: getError(error, "verify") });
 
-	next();
-};
+// 	next();
+// };
 
 const loginValidation = ({ body }, res, next) => {
 	const { error } = schema.login.validate(body);
@@ -88,7 +85,7 @@ const avatarValidation = ({ file }, res, next) => {
 
 module.exports = {
 	registerValidation,
-	verifyValidation,
+	// verifyValidation,
 	loginValidation,
 	updateValidation,
 	avatarValidation,

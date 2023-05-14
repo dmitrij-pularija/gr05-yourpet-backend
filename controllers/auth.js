@@ -1,7 +1,7 @@
 const {
 	createUser,
-	verifyEmail,
-	resendVerifyEmail,
+	// verifyEmail,
+	// resendVerifyEmail,
 	loginUser,
 	updateUser,
 	getCurrentUser,
@@ -11,11 +11,11 @@ const {
 
 const registr = async ({ body }) => await createUser(body);
 
-const verify = async ({ params: { verificationToken } }) =>
-	await verifyEmail(verificationToken);
+// const verify = async ({ params: { verificationToken } }) =>
+// 	await verifyEmail(verificationToken);
 
-const resendVerify = async ({ body: { email } }) =>
-	await resendVerifyEmail(email);
+// const resendVerify = async ({ body: { email } }) =>
+// 	await resendVerifyEmail(email);
 
 const login = async ({ body: { email, password } }) =>
 	await loginUser(email, password);
@@ -33,8 +33,8 @@ const logout = async ({ user: { _id } }) => await logoutUser(_id);
 
 module.exports = {
 	registr,
-	verify,
-	resendVerify,
+	// verify,
+	// resendVerify,
 	login,
 	current,
 	avatar,
