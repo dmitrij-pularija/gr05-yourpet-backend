@@ -16,7 +16,7 @@ const FindDuplicates = async (body, owner, id = "") => {
   if (duplicateFields.length > 0)
     throw HttpError(
       400,
-      `Contact with fields: ${duplicateFields.join(", ")} already exists`
+      `Pet with fields: ${duplicateFields.join(", ")} already exists`
     );
 };
 

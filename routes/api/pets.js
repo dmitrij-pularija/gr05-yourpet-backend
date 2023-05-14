@@ -1,33 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-const ctrlWrapper = require("../../decorators/ctrlWrapper");
+// const ctrlWrapper = require("../../decorators/ctrl");
+const ctrl = require("../../decorators/ctrlWrap");
 const authenticate = require("../../middleware/authenticate");
+const { listPets, add, del } = require("../../controllers/pets.js");
+const uploadCloud = require("../../middleware/upload");
 
-const {
-  list,
-  get,
-  add,
-  del,
-  edit,
-  fav,
-} = require("../../controllers/contacts.js");
 const {
   addValidation,
-  editValidation,
-  favValidation,
-} = require("../../middleware/contactsValidation.js");
+  isValidId,
+} = require("../../middleware/petsValidation.js");
 
-router.get("/", authenticate, ctrlWrapper(list));
-router.get("/:contactId", authenticate, ctrlWrapper(get));
-router.post("/", authenticate, addValidation, ctrlWrapper(add));
-router.delete("/:contactId", authenticate, ctrlWrapper(del));
-router.put("/:contactId", authenticate, editValidation, ctrlWrapper(edit));
-router.patch(
-  "/:contactId/favorite",
+router.get("/", authenticate, listPets);
+router.post(
+  "/",
   authenticate,
-  favValidation,
-  ctrlWrapper(fav)
+  addValidation,
+  uploadCloud.single("image"),
+  ctrl(add)
 );
+router.delete("/:id", authenticate, isValidId, ctrl(del));
 
 module.exports = router;
