@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
-// app.use("/api/notices", noticesRouter);
+app.use("/api/notices", noticesRouter);
 // app.use("/api/pets", petsRouter);
 // app.use("/api/friends", friendsRouter);
 // app.use("/api/news", newsRouter);
