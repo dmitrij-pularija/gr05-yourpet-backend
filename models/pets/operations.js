@@ -1,6 +1,7 @@
-const Contacts = require("./schemas");
+const { Pets } = require("./schemas");
+const httpError = require("../../utilities/httpError");
 
-const listContacts = async ({
+const listPets = async ({
   query: { favorite, page, limit },
   user: { _id },
 }) => {
@@ -11,28 +12,24 @@ const listContacts = async ({
 
   if (favorite) filter.favorite = favorite;
 
-  return await Contacts.find(filter).skip(skip).limit(perPage);
+  return await Pets.find(filter).skip(skip).limit(perPage);
 };
-const getContactById = async (contactId, user) =>
-  await Contacts.findOne({ owner: user._id, _id: contactId });
-const removeContact = async (contactId, user) =>
-  await Contacts.findOneAndRemove({ owner: user._id, _id: contactId });
-const addContact = async ({ body, user: { _id } }) =>
-  await Contacts.create({ ...body, owner: _id });
-const updateContact = async (contactId, body, user) =>
-  await Contacts.findOneAndUpdate({ owner: user._id, _id: contactId }, body, {
-    new: true,
-  });
-const updateStatusContact = async (contactId, body, user) =>
-  await Contacts.findOneAndUpdate({ owner: user._id, _id: contactId }, body, {
-    new: true,
-  });
+const removePet = async (req, res) => {
+  const { _id } = req.params;
+  const result = await Pets.findByIdAndRemove(_id);
+  if (!result) {
+    throw httpError(404, "There is no such id");
+  }
+  res.json({ message: "Pet deleted" });
+};
 
+const addPet = async ({ req, body, res }) => {
+  const { _id: owner } = req.user;
+  const newPet = await Pets.create({ ...body, owner });
+  return res.status(201).json(newPet);
+};
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
+  listPets,
+  removePet,
+  addPet,
 };

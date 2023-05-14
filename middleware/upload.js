@@ -1,5 +1,5 @@
-const cloudinary = require('cloudinary').v2
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 // const path = require("path");
 const HttpError = require("../utilities/httpError");
@@ -10,7 +10,7 @@ cloudinary.config({
   cloud_name: CLOUD_NAME,
   api_key: API_KEY,
   api_secret: API_SECRET,
-  secure: true 
+  secure: true,
 });
 
 const MIME_TYPES = {
