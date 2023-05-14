@@ -36,7 +36,7 @@ const schema = {
 		owner: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),	
 	}),
 	getCategory: Joi.object({
-		category: Joi.string().valid("sell", "lost-found", "for-free"),
+		category: Joi.string().valid("sell", "lost/found", "In good hands"),
 	}),
 };
 
@@ -48,7 +48,7 @@ const addNoticeValidation = ({ body }, res, next) => {
 	next();
 };
 const getNoticeCategoryValidation = ({ category }, res, next) => {
-	const { error } = getCategorySchema.validate({ category });
+	const { error } = schema.getCategory.validate({ category });
 	if (error) {
 		return res.status(400).json({
 			error:
