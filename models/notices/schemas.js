@@ -34,7 +34,7 @@ const noticeSchema = new Schema(
 		},
 		category: {
 			type: String,
-			enum: ["sell", "lost-found", "for-free"],
+			enum: ["sell", "lost/found", "In good hands"],
 			required: true,
 		},
 		price: {
@@ -61,7 +61,7 @@ const noticeSchema = new Schema(
 			required: true,
 		},
 	},
-	{ versionKey: false, timestamps: false }
+	{ versionKey: false, timestamps: true }
 );
 
 noticeSchema.post("save", (error, data, next) => {
