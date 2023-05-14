@@ -8,7 +8,14 @@
 	},
 	"consumes": ["appliation/json", "multipart/form-data"],
 	"produces": ["application/json"],
-	"servers": [{ "url": "" }],
+	"servers": [
+		{
+			"url": "https://yourpet-api.onrender.com"
+		},
+		{
+			"url": "http://localhost:3001"
+		}
+	],
 	"tags": [
 		{
 			"name": "Auth",
@@ -358,7 +365,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -389,7 +396,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -560,7 +567,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -593,7 +600,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -626,7 +633,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -659,7 +666,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid category, please select one of next category: sell; lost-found; for-free",
+						"description": "Invalid category, please select one of next category: sell; lost/found; In good hands",
 						"content": {}
 					}
 				}
@@ -1311,7 +1318,7 @@
 				"properties": {
 					"category": {
 						"type": "string",
-						"enum": ["sell", "lost-found", "for-free"]
+						"enum": ["sell", "lost/found", "In good hands"]
 					}
 				}
 			},
