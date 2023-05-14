@@ -47,12 +47,12 @@ const addNoticeValidation = ({ body }, res, next) => {
 
 	next();
 };
-const getNoticeCategoryValidation = ({ category }, res, next) => {
-	const { error } = schema.getCategory.validate({ category });
+const getNoticeCategoryValidation = ({ query }, res, next) => {
+	const { error } = schema.getCategory.category.validate({ query });
 	if (error) {
 		return res.status(400).json({
 			error:
-				'Invalid category, please select one of: ["sell", "lost-found", "for-free"]',
+				'Invalid category, please select one of: ["sell", "lost/found", "In good hands"]',
 		});
 	}
 	next();
