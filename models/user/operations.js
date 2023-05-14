@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const Jimp = require("jimp");
 const path = require("path");
 const { unlink } = require("fs/promises");
@@ -9,7 +9,7 @@ const { unlink } = require("fs/promises");
 const { SECRET_KEY } = process.env;
 const User = require("./schemas");
 const HttpError = require("../../utilities/httpError");
-const sendEmail = require("../../utilities/sendEmail");
+// const sendEmail = require("../../utilities/sendEmail");
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const createUser = async (body) => {
@@ -17,40 +17,41 @@ const createUser = async (body) => {
 	if (user) throw HttpError(409, "Email in use");
 	const avatarURL = gravatar.url(body.email, { protocol: "http", s: "250" });
 	const password = await bcrypt.hash(body.password, 10);
-	const verificationToken = uuidv4();
-	const { _id, name, email } = await User.create({
+	// const verificationToken = uuidv4();
+	const { name, email } = await User.create({
 		...body,
 		password,
 		avatarURL,
-		verificationToken,
+		// verificationToken,
 	});
-	const token = jwt.sign({ id: _id }, SECRET_KEY, { expiresIn: "23h" });
-	// await sendEmail(verificationToken, email, name);
+	// const token = jwt.sign({ id: _id }, SECRET_KEY, { expiresIn: "23h" });
+	// console.log(_id, body);
+	// const { name, email } = await User.findByIdAndUpdate(_id, body);
 
-	return { token, user: { name, email, avatarURL } };
+	return { user: { name, email, avatarURL } };
 };
 
-const verifyEmail = async (verificationToken) => {
-	const user = await User.findOne({ verificationToken });
-	if (!user) throw HttpError(404, "User not found");
-	await User.findByIdAndUpdate(user._id, {
-		verify: true,
-		verificationToken: null,
-	});
+// const verifyEmail = async (verificationToken) => {
+// 	const user = await User.findOne({ verificationToken });
+// 	if (!user) throw HttpError(404, "User not found");
+// 	await User.findByIdAndUpdate(user._id, {
+// 		verify: true,
+// 		verificationToken: null,
+// 	});
 
-	return { message: "Verification successful" };
-};
+// 	return { message: "Verification successful" };
+// };
 
-const resendVerifyEmail = async (email) => {
-	const user = await User.findOne({ email });
-	if (!user) throw HttpError(404, "User not found");
-	if (user.verify)
-		throw HttpError(400, "Verification has already been passed");
+// const resendVerifyEmail = async (email) => {
+// 	const user = await User.findOne({ email });
+// 	if (!user) throw HttpError(404, "User not found");
+// 	if (user.verify)
+// 		throw HttpError(400, "Verification has already been passed");
 
-	await sendEmail(user.verificationToken, email, user.name);
+// 	await sendEmail(user.verificationToken, email, user.name);
 
-	return { message: "Verification email sent" };
-};
+// 	return { message: "Verification email sent" };
+// };
 
 const loginUser = async (email, password) => {
 	const user = await User.findOne({ email });
@@ -68,15 +69,21 @@ const loginUser = async (email, password) => {
 const logoutUser = async (_id) =>
 	await User.findByIdAndUpdate(_id, { token: null });
 
-const getCurrentUser = async (name, email, subscription, avatarURL) => {
-	return await { user: { name, email, subscription, avatarURL } };
+const getCurrentUser = async (
+	name,
+	email,
+	birthday,
+	phone,
+	city,
+	avatarURL
+) => {
+	return await { user: { name, email, birthday, phone, city, avatarURL } };
 };
 
-const updateSubscription = async (subscription, _id) => {
-	const { name, email, avatarURL } = await User.findByIdAndUpdate(_id, {
-		subscription,
-	});
-	return { user: { name, email, subscription, avatarURL } };
+const updateUser = async (body, _id) => {
+	const { name, email, city, phone, birthday, avatarURL } =
+		await User.findByIdAndUpdate(_id, body);
+	return { user: { name, email, city, phone, birthday, avatarURL } };
 };
 
 const changeAvatar = async (tempUpload, _id) => {
@@ -95,11 +102,11 @@ const changeAvatar = async (tempUpload, _id) => {
 
 module.exports = {
 	createUser,
-	verifyEmail,
-	resendVerifyEmail,
+	// verifyEmail,
+	// resendVerifyEmail,
 	loginUser,
 	logoutUser,
 	changeAvatar,
 	getCurrentUser,
-	updateSubscription,
+	updateUser,
 };
