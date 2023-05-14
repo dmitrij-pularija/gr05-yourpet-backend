@@ -2,7 +2,10 @@ const NoticeModel = require("./schemas");
 
 const addNotice = async ({ body, user: { _id } }) =>
 	await NoticeModel.create({ ...body, owner: _id });
-
+const addNoticeToFavorite = async ({ id, user: { _id } }) =>
+	await NoticeModel.findByIdAndUpdate(id, { favorite: _id });
+const deleteNoticeFromFavorite = async (id) =>
+	await NoticeModel.findByIdAndDelete(id);
 const getOneNotice = async ({ id }) => await NoticeModel.findById(id);
 const getNoticeByTitle = async ({ title, category }) =>
 	await NoticeModel.find({ title, category });
@@ -15,6 +18,8 @@ const deleteNotice = async (id, user) =>
 
 module.exports = {
 	addNotice,
+	addNoticeToFavorite,
+	deleteNoticeFromFavorite,
 	getNoticeCategory,
 	getNoticeByTitle,
 	getNoticeByOwnerId,

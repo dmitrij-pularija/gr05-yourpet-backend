@@ -4,8 +4,10 @@ const getError = require("../utilities/validationError");
 
 const schema = {
 	add: Joi.object({
-		category: Joi.string().valid("sell", "lost/found", "In good hands").required(),
-		title: Joi.string().min(2).max(120).required(),
+		category: Joi.string()
+			.valid("sell", "lost/found", "In good hands")
+			.required(),
+		title: Joi.string().min(2).max(16).required(),
 		birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
 		name: Joi.string().min(2).max(16).required(),
 		breed: Joi.string().min(2).max(16).required(),
@@ -33,7 +35,9 @@ const schema = {
 		image: Joi.string().min(2).max(120).required(),
 		email: Joi.string().email(),
 		phone: Joi.string().min(6).max(20),
-		owner: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),	
+		owner: Joi.string()
+			.regex(/^[0-9a-fA-F]{24}$/)
+			.required(),
 	}),
 	getCategory: Joi.object({
 		category: Joi.string().valid("sell", "lost/found", "In good hands"),
