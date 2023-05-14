@@ -4,7 +4,9 @@ const getError = require("../utilities/validationError");
 
 const schema = {
 	add: Joi.object({
-		category: Joi.string().valid("sell", "lost-found", "for-free").required(),
+		category: Joi.string()
+			.valid("sell", "lost/found", "in good hands")
+			.required(),
 		title: Joi.string().min(2).max(16).required(),
 		birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
 		name: Joi.string().min(2).max(16).required(),
@@ -15,7 +17,7 @@ const schema = {
 			.min(2)
 			.max(50)
 			.when("category", {
-				is: Joi.valid("sell", "lost-found", "for-free"),
+				is: Joi.valid("sell", "lost/found", "in good hands"),
 				then: Joi.required(),
 				otherwise: Joi.optional(),
 			}),
@@ -32,7 +34,7 @@ const schema = {
 			.regex(/^[\s\S]*.*[^\s][\s\S]*$/),
 	}),
 	getCategory: Joi.object({
-		category: Joi.string().valid("sell", "lost-found", "for-free"),
+		category: Joi.string().valid("sell", "lost/found", "in good hands"),
 	}),
 };
 
@@ -48,7 +50,7 @@ const getNoticeCategoryValidation = ({ category }, res, next) => {
 	if (error) {
 		return res.status(400).json({
 			error:
-				'Invalid category, please select one of: ["sell", "lost-found", "for-free"]',
+				'Invalid category, please select one of: ["sell", "lost/found", "in good hands"]',
 		});
 	}
 	next();
