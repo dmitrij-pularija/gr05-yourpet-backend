@@ -10,7 +10,7 @@ const schema = {
 		name: Joi.string().min(3).max(20),
 		email: Joi.string().email().pattern(emailRegexp).required(),
 		password: Joi.string().pattern(passRegexp).required(),
-		subscription: Joi.string().valid("starter", "pro", "business"),
+		// subscription: Joi.string().valid("starter", "pro", "business"),
 	}).unknown(false),
 	verify: Joi.object({
 		email: Joi.string().email().pattern(emailRegexp).required(),
@@ -19,10 +19,12 @@ const schema = {
 		email: Joi.string().email().pattern(emailRegexp).required(),
 		password: Joi.string().pattern(passRegexp).required(),
 	}).unknown(false),
-	subscription: Joi.object({
-		subscription: Joi.string()
-			.valid("starter", "pro", "business")
-			.required(),
+	update: Joi.object({
+		name: Joi.string().min(3).max(20),
+		email: Joi.string().email().pattern(emailRegexp).required(),
+		birthday: Joi.string().max(10),
+		phone: Joi.string().max(13),
+		city: Joi.string(),
 	}).unknown(false),
 	avatar: Joi.object({
 		fieldname: Joi.string().valid("avatar").required(),
@@ -66,8 +68,8 @@ const loginValidation = ({ body }, res, next) => {
 	next();
 };
 
-const subscriptionValidation = ({ body }, res, next) => {
-	const { error } = schema.subscription.validate(body);
+const updateValidation = ({ body }, res, next) => {
+	const { error } = schema.update.validate(body);
 
 	if (error)
 		return res.status(400).json({ message: getError(error, "register") });
@@ -88,6 +90,6 @@ module.exports = {
 	registerValidation,
 	verifyValidation,
 	loginValidation,
-	subscriptionValidation,
+	updateValidation,
 	avatarValidation,
 };

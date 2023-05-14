@@ -8,7 +8,7 @@ const {
 	registerValidation,
 	verifyValidation,
 	loginValidation,
-	subscriptionValidation,
+	updateValidation,
 	avatarValidation,
 } = require("../../middleware/userValidation");
 
@@ -19,7 +19,7 @@ const {
 	verify,
 	resendVerify,
 	login,
-	subscription,
+	update,
 	current,
 	avatar,
 	logout,
@@ -29,18 +29,8 @@ router.post("/register", registerValidation, authWrapper(registr));
 router.get("/verify/:verificationToken", authWrapper(verify));
 router.post("/verify", verifyValidation, authWrapper(resendVerify));
 router.post("/login", loginValidation, authWrapper(login));
-router.patch(
-	"/subscription",
-	authenticate,
-	subscriptionValidation,
-	authWrapper(subscription)
-);
-// router.patch(
-// 	"/update",
-// 	authenticate,
-// 	subscriptionValidation,
-// 	authWrapper(subscription)
-// );
+router.patch("/update", authenticate, updateValidation, authWrapper(update));
+
 router.patch(
 	"/avatars",
 	authenticate,

@@ -17,10 +17,19 @@ const user = new Schema(
 			required: [true, "Email is required"],
 			unique: true,
 		},
-		subscription: {
+		birthday: {
 			type: String,
-			enum: ["starter", "pro", "business"],
-			default: "starter",
+			maxlength: 10,
+			default: "",
+		},
+		phone: {
+			type: String,
+			maxlength: 13,
+			default: "",
+		},
+		city: {
+			type: String,
+			default: "",
 		},
 		avatarURL: {
 			type: String,

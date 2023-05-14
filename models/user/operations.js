@@ -68,15 +68,23 @@ const loginUser = async (email, password) => {
 const logoutUser = async (_id) =>
 	await User.findByIdAndUpdate(_id, { token: null });
 
-const getCurrentUser = async (name, email, subscription, avatarURL) => {
-	return await { user: { name, email, subscription, avatarURL } };
+const getCurrentUser = async (
+	name,
+	email,
+	birthday,
+	phone,
+	city,
+	avatarURL
+) => {
+	return await { user: { name, email, birthday, phone, city, avatarURL } };
 };
 
-const updateSubscription = async (subscription, _id) => {
-	const { name, email, avatarURL } = await User.findByIdAndUpdate(_id, {
-		subscription,
-	});
-	return { user: { name, email, subscription, avatarURL } };
+const updateUser = async (body, _id) => {
+	console.log(body);
+
+	const { name, email, city, phone, birthday, avatarURL } =
+		await User.findByIdAndUpdate(_id, body);
+	return { user: { name, email, city, phone, birthday, avatarURL } };
 };
 
 const changeAvatar = async (tempUpload, _id) => {
@@ -101,5 +109,5 @@ module.exports = {
 	logoutUser,
 	changeAvatar,
 	getCurrentUser,
-	updateSubscription,
+	updateUser,
 };
