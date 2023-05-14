@@ -5,29 +5,24 @@ const ctrlWrapper = require("../../decorators/ctrlWrapper");
 const authenticate = require("../../middleware/authenticate");
 
 const {
-  list,
-  get,
-  add,
-  del,
-  edit,
-  fav,
-} = require("../../controllers/contacts.js");
-const {
-  addValidation,
-  editValidation,
-  favValidation,
-} = require("../../middleware/contactsValidation.js");
+	add,
+	getCategory,
+	getOne,
+	getByTitle,
+	getByOwnerId,
+	del,
+} = require("../../controllers/notices");
 
-router.get("/", authenticate, ctrlWrapper(list));
-router.get("/:contactId", authenticate, ctrlWrapper(get));
-router.post("/", authenticate, addValidation, ctrlWrapper(add));
-router.delete("/:contactId", authenticate, ctrlWrapper(del));
-router.put("/:contactId", authenticate, editValidation, ctrlWrapper(edit));
-router.patch(
-  "/:contactId/favorite",
-  authenticate,
-  favValidation,
-  ctrlWrapper(fav)
-);
+const {
+	addNoticeValidation,
+	getNoticeCategoryValidation,
+} = require("../../middleware/noticeValidation");
+
+router.get("/", getNoticeCategoryValidation, ctrlWrapper(getCategory));
+router.get("/:id", ctrlWrapper(getOne));
+router.get("/find", ctrlWrapper(getByTitle));
+router.get("/user", authenticate, ctrlWrapper(getByOwnerId));
+router.post("/", authenticate, addNoticeValidation, ctrlWrapper(add));
+router.delete("/:id", authenticate, ctrlWrapper(del));
 
 module.exports = router;

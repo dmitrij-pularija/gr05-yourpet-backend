@@ -1,38 +1,23 @@
-const Contacts = require("./schemas");
+const NoticeModel = require("./schemas");
 
-const listContacts = async ({
-  query: { favorite, page, limit },
-  user: { _id },
-}) => {
-  const filter = { owner: _id };
-  const pageNumber = parseInt(page) || 1;
-  const perPage = parseInt(limit) || 20;
-  const skip = (pageNumber - 1) * perPage;
+const addNotice = async ({ body, user: { _id } }) =>
+	await NoticeModel.create({ ...body, owner: _id });
 
-  if (favorite) filter.favorite = favorite;
-
-  return await Contacts.find(filter).skip(skip).limit(perPage);
-};
-const getContactById = async (contactId, user) =>
-  await Contacts.findOne({ owner: user._id, _id: contactId });
-const removeContact = async (contactId, user) =>
-  await Contacts.findOneAndRemove({ owner: user._id, _id: contactId });
-const addContact = async ({ body, user: { _id } }) =>
-  await Contacts.create({ ...body, owner: _id });
-const updateContact = async (contactId, body, user) =>
-  await Contacts.findOneAndUpdate({ owner: user._id, _id: contactId }, body, {
-    new: true,
-  });
-const updateStatusContact = async (contactId, body, user) =>
-  await Contacts.findOneAndUpdate({ owner: user._id, _id: contactId }, body, {
-    new: true,
-  });
+const getOneNotice = async ({ id }) => await NoticeModel.findById(id);
+const getNoticeByTitle = async ({ title, category }) =>
+	await NoticeModel.find({ title, category });
+const getNoticeCategory = async ({ category }) =>
+	await NoticeModel.find({ category });
+const getNoticeByOwnerId = async (id, user) =>
+	await NoticeModel.find({ owner: user._id, _id: id });
+const deleteNotice = async (id, user) =>
+	await NoticeModel.findOneAndRemove({ owner: user._id, _id: id });
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
+	addNotice,
+	getNoticeCategory,
+	getNoticeByTitle,
+	getNoticeByOwnerId,
+	getOneNotice,
+	deleteNotice,
 };

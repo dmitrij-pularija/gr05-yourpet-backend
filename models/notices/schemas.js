@@ -1,40 +1,73 @@
 const { Schema, model } = require("mongoose");
 
-const contacts = new Schema(
-  {
-    name: {
-      type: String,
-      minlength: 3,
-      maxlength: 20,
-      required: [true, "Set name for contact"],
-    },
-    email: {
-      type: String,
-      required: [true, "Set email for contact"],
-    },
-    phone: {
-      type: String,
-      minlength: 6,
-      maxlength: 20,
-      required: [true, "Set phone for contact"],
-    },
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-  },
-  { versionKey: false, timestamps: false }
+const noticeSchema = new Schema(
+	{
+		title: {
+			type: String,
+			required: true,
+		},
+		name: {
+			type: String,
+			minLength: 2,
+			maxLength: 16,
+			required: true,
+		},
+		birthday: {
+			type: String,
+			default: "00.00.0000",
+			required: true,
+		},
+		breed: {
+			type: String,
+			minLength: 2,
+			maxLength: 16,
+			required: true,
+		},
+		location: {
+			type: String,
+			required: true,
+		},
+		sex: {
+			type: String,
+			enum: ["male", "female"],
+			required: [true, "Choose the sex of the animal, male or female"],
+		},
+		category: {
+			type: String,
+			enum: ["sell", "lost-found", "for-free"],
+			required: true,
+		},
+		price: {
+			type: String,
+		},
+		comments: {
+			type: String,
+		},
+		image: {
+			type: String,
+			required: true,
+		},
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "user",
+			required: true,
+		},
+		email: {
+			type: String,
+			required: true,
+		},
+		phone: {
+			type: String,
+			required: true,
+		},
+	},
+	{ versionKey: false, timestamps: false }
 );
 
-contacts.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
+noticeSchema.post("save", (error, data, next) => {
+	error.status = 400;
+	next();
 });
 
-const Contacts = model("contacts", contacts);
-
-module.exports = Contacts;
+const NoticeModel = model("notice", noticeSchema);
+module.exports = NoticeModel;
