@@ -74,19 +74,18 @@ const updateValidation = ({ body }, res, next) => {
 	next();
 };
 
-const avatarValidation = ({ file }, res, next) => {
-	const { error } = schema.avatar.validate(file);
-	if (error) {
-		unlinkSync(file.path);
-		return res.status(400).json({ message: getError(error, "avatar") });
-	}
-	next();
-};
+// const avatarValidation = (req, res, next) => {//
+// 	const { error } = schema.avatar.validate(req.file);//
+// 	if (error) {
+// 		return res.status(400).json({ message: getError(error, "avatar") });
+// 	}
+// 	next();
+// };
 
 module.exports = {
 	registerValidation,
 	// verifyValidation,
 	loginValidation,
 	updateValidation,
-	avatarValidation,
+	// avatarValidation,
 };
