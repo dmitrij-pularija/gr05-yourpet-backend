@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const authenticate = require("../../middleware/authenticate");
-const upload = require("../../middleware/upload");
+const uploads = require("../../middleware/upload");
 
 const {
 	registerValidation,
 	// verifyValidation,
 	loginValidation,
 	updateValidation,
-	avatarValidation,
+	// avatarValidation,
 } = require("../../middleware/userValidation");
 
 const authWrapper = require("../../decorators/authWrapper");
@@ -34,8 +34,7 @@ router.patch("/update", authenticate, updateValidation, authWrapper(update));
 router.patch(
 	"/avatars",
 	authenticate,
-	upload.single("avatar"),
-	avatarValidation,
+	uploads.avatars.single("avatar"),
 	authWrapper(avatar)
 );
 router.get("/current", authenticate, authWrapper(current));

@@ -22,8 +22,14 @@ const login = async ({ body: { email, password } }) =>
 
 const update = async ({ body, user: { _id } }) => await updateUser(body, _id);
 
-const avatar = async ({ file: { path: tempUpload }, user: { _id } }) =>
-	await changeAvatar(tempUpload, _id);
+// const avatar = async ({ file: { path: tempUpload }, user: { _id } }) => {
+// 	console.log(tempUpload);
+// 	await changeAvatar(tempUpload, _id);
+// };
+
+const avatar = async ({ file: { path: cloudinaryURL }, user: { _id } }) => {
+	return await changeAvatar(cloudinaryURL, _id);
+};
 
 const current = async ({
 	user: { name, email, birthday, phone, city, avatarURL },

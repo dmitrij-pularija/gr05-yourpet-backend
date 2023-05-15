@@ -2,15 +2,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 // const { v4: uuidv4 } = require("uuid");
-const Jimp = require("jimp");
-const path = require("path");
-const { unlink } = require("fs/promises");
+// const Jimp = require("jimp");
+// const path = require("path");
+// const { unlink } = require("fs/promises");
 
 const { SECRET_KEY } = process.env;
 const User = require("./schemas");
 const HttpError = require("../../utilities/httpError");
 // const sendEmail = require("../../utilities/sendEmail");
-const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+// const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const createUser = async (body) => {
 	const user = await User.findOne({ email: body.email });
@@ -86,17 +86,31 @@ const updateUser = async (body, _id) => {
 	return { user: { name, email, city, phone, birthday, avatarURL } };
 };
 
-const changeAvatar = async (tempUpload, _id) => {
-	const filename = `${_id}_avatar.jpg`;
-	const resultUpload = path.join(avatarsDir, filename);
-	const image = await Jimp.read(tempUpload);
-	image.resize(250, 250);
-	const whiteImage = await new Jimp(250, 250, 0xffffffff);
-	whiteImage.composite(image, 0, 0);
-	await whiteImage.quality(65).write(resultUpload);
-	const avatarURL = path.join("avatars", filename);
-	await User.findByIdAndUpdate(_id, { avatarURL });
-	await unlink(tempUpload);
+// const changeAvatar = async (tempUpload, _id) => {
+// 	const filename = `${_id}_avatar.jpg`;
+// 	const resultUpload = path.join(avatarsDir, filename);
+// 	const image = await Jimp.read(tempUpload);
+// 	image.resize(250, 250);
+// 	const whiteImage = await new Jimp(250, 250, 0xffffffff);
+// 	whiteImage.composite(image, 0, 0);
+// 	await whiteImage.quality(65).write(resultUpload);
+// 	const avatarURL = path.join("avatars", filename);
+// 	await User.findByIdAndUpdate(_id, { avatarURL });
+// 	await unlink(tempUpload);
+// 	return { avatarURL };
+// };
+
+const changeAvatar = async (cloudinaryURL, _id) => {
+	const avatarURL = cloudinaryURL;
+
+	await User.findByIdAndUpdate(_id, { avatarURL })
+		.then(() => {
+			console.log("after update");
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+
 	return { avatarURL };
 };
 
