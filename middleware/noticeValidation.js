@@ -7,7 +7,7 @@ const schema = {
 		category: Joi.string()
 			.valid("sell", "lost/found", "In good hands")
 			.required(),
-		title: Joi.string().min(2).max(16).required(),
+		title: Joi.string().min(2).max(120).required(),
 		birthday: Joi.string().pattern(/^\d{2}\.\d{2}\.\d{4}$/),
 		name: Joi.string().min(2).max(16).required(),
 		breed: Joi.string().min(2).max(16).required(),
@@ -41,7 +41,10 @@ const schema = {
 	}),
 	getCategory: Joi.object({
 		category: Joi.string().valid("sell", "lost/found", "In good hands"),
-	}),
+		search: Joi.string().min(3).max(30),
+		page: Joi.string().min(1).max(4),
+		perpage: Joi.string().min(2).max(3),
+	}).xor('category', 'search', 'page', 'perpage'),
 };
 
 const addNoticeValidation = ({ body }, res, next) => {
@@ -52,11 +55,11 @@ const addNoticeValidation = ({ body }, res, next) => {
 	next();
 };
 const getNoticeCategoryValidation = ({ query }, res, next) => {
-	const { error } = schema.getCategory.category.validate({ query });
+	const { error } = schema.getCategory.validate( query );
 	if (error) {
 		return res.status(400).json({
 			error:
-				'Invalid category, please select one of: ["sell", "lost/found", "In good hands"]',
+			"Invalid category, please select one of: 'sell', 'lost/found', 'In good hands'",
 		});
 	}
 	next();
