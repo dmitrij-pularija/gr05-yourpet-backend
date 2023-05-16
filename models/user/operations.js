@@ -18,17 +18,17 @@ const createUser = async (body) => {
 	const avatarURL = gravatar.url(body.email, { protocol: "http", s: "250" });
 	const password = await bcrypt.hash(body.password, 10);
 	// const verificationToken = uuidv4();
-	const { name, email } = await User.create({
+	const { _id, name, email } = await User.create({
 		...body,
 		password,
 		avatarURL,
 		// verificationToken,
 	});
-	// const token = jwt.sign({ id: _id }, SECRET_KEY, { expiresIn: "23h" });
+	const token = jwt.sign({ id: _id }, SECRET_KEY, { expiresIn: "23h" });
 	// console.log(_id, body);
-	// const { name, email } = await User.findByIdAndUpdate(_id, body);
+	await User.findByIdAndUpdate(_id, { token });
 
-	return { user: { name, email, avatarURL } };
+	return { token, user: { name, email, avatarURL } };
 };
 
 // const verifyEmail = async (verificationToken) => {
