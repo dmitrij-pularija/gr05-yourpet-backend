@@ -32,8 +32,8 @@ const avatar = async ({ file: { path: cloudinaryURL }, user: { _id } }) => {
 };
 
 const current = async ({
-	user: { name, email, birthday, phone, city, avatarURL },
-}) => await getCurrentUser(name, email, birthday, phone, city, avatarURL);
+	user: { _id, name, email, birthday, phone, city, avatarURL },
+}) => await getCurrentUser(_id, name, email, birthday, phone, city, avatarURL);
 
 const logout = async ({ user: { _id } }) => await logoutUser(_id);
 

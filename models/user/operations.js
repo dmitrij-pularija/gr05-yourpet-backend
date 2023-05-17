@@ -28,7 +28,7 @@ const createUser = async (body) => {
 	// console.log(_id, body);
 	await User.findByIdAndUpdate(_id, { token });
 
-	return { token, user: { name, email, avatarURL } };
+	return { token, user: { _id, name, email, avatarURL } };
 };
 
 // const verifyEmail = async (verificationToken) => {
@@ -60,16 +60,17 @@ const loginUser = async (email, password) => {
 	const passwordCompare = await bcrypt.compare(password, user.password);
 	if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
 	const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "23h" });
-	const { name, avatarURL } = await User.findByIdAndUpdate(user._id, {
+	const { _id, name, avatarURL } = await User.findByIdAndUpdate(user._id, {
 		token,
 	});
-	return { token, user: { name, email, avatarURL } };
+	return { token, user: { _id, name, email, avatarURL } };
 };
 
 const logoutUser = async (_id) =>
 	await User.findByIdAndUpdate(_id, { token: null });
 
 const getCurrentUser = async (
+	_id,
 	name,
 	email,
 	birthday,
@@ -77,13 +78,13 @@ const getCurrentUser = async (
 	city,
 	avatarURL
 ) => {
-	return await { user: { name, email, birthday, phone, city, avatarURL } };
+	return await { user: { _id, name, email, birthday, phone, city, avatarURL } };
 };
 
 const updateUser = async (body, _id) => {
 	const { name, email, city, phone, birthday, avatarURL } =
 		await User.findByIdAndUpdate(_id, body);
-	return { user: { name, email, city, phone, birthday, avatarURL } };
+	return { user: { _id, name, email, city, phone, birthday, avatarURL } };
 };
 
 // const changeAvatar = async (tempUpload, _id) => {
