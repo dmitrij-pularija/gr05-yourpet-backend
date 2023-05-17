@@ -24,9 +24,9 @@ const petSchema = new Schema(
       minLength: 8,
       maxLength: 120,
     },
-    image: {
+    petsURL: {
       type: String,
-      required: true,
+      default: "",
     },
     owner: {
       type: Schema.Types.ObjectId,
