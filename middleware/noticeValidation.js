@@ -44,7 +44,15 @@ const schema = {
 		search: Joi.string().min(3).max(30),
 		page: Joi.string().min(1).max(4),
 		perpage: Joi.string().min(2).max(3),
-	}).or('category', 'search', 'page', 'perpage'),
+		age: Joi.string().valid("1", "2", "3-12").when(Joi.exist(), {
+			then: Joi.required(),
+			otherwise: Joi.forbidden()
+		  }),
+		  gender: Joi.string().valid("female", "male").when(Joi.exist(), {
+			then: Joi.required(),
+			otherwise: Joi.forbidden()
+		})  
+	}).or('category', 'search', 'page', 'perpage', 'age', 'gender'),
 };
 
 const addNoticeValidation = ({ body }, res, next) => {
