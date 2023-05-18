@@ -13,11 +13,11 @@ const ctrlWrapper = (ctrl) => {
     //     throw HttpError(404);
       // if (name === "add") await FindDuplicates(body, _id);
       // if (name === "edit") await FindDuplicates(body, _id, id);
-
+      
       const result = await ctrl(req, res, next);
 
       if (!result) throw HttpError(404);
-      // if (result.length === 0 && name === "list") throw HttpError(404);
+      if (result.length === 0) throw HttpError(404);
       // if (res.headersSent) return;
       // if (name === "del") {
       //   return res.status(200).json({ message: `Pet with id:${id} deleted` });

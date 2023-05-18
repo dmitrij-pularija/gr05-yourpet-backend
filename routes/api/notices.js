@@ -9,7 +9,7 @@ const {
 	addFavorite,
 	getCategory,
 	getOne,
-	getByTitle,
+	// getByTitle,
 	getByOwnerId,
 	delFavourite,
 	del,
@@ -22,7 +22,7 @@ const {
 
 router.get("/", getNoticeCategoryValidation, ctrlWrapper(getCategory));
 router.get("/:id", ctrlWrapper(getOne));
-router.get("/find", ctrlWrapper(getByTitle));
+// router.get("/find", ctrlWrapper(getByTitle));
 router.get("/user", authenticate, ctrlWrapper(getByOwnerId));
 router.post("/", authenticate, addNoticeValidation, ctrlWrapper(add));
 router.post("/favorite", authenticate, ctrlWrapper(addFavorite));

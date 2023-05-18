@@ -44,7 +44,7 @@ const schema = {
 		search: Joi.string().min(3).max(30),
 		page: Joi.string().min(1).max(4),
 		perpage: Joi.string().min(2).max(3),
-	}).xor('category', 'search', 'page', 'perpage'),
+	}).or('category', 'search', 'page', 'perpage'),
 };
 
 const addNoticeValidation = ({ body }, res, next) => {
@@ -58,8 +58,8 @@ const getNoticeCategoryValidation = ({ query }, res, next) => {
 	const { error } = schema.getCategory.validate( query );
 	if (error) {
 		return res.status(400).json({
-			error:
-			"Invalid category, please select one of: 'sell', 'lost/found', 'In good hands'",
+			error: error.message
+			// "Invalid category, please select one of: 'sell', 'lost/found', 'In good hands'",
 		});
 	}
 	next();
