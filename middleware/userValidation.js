@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { unlinkSync } = require("fs");
+// const { unlinkSync } = require("fs");
 const getError = require("../utilities/validationError");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
