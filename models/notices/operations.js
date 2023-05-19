@@ -1,11 +1,35 @@
 const NoticeModel = require("./schemas");
+const HttpError = require("../../utilities/httpError");
+const filterNotices = require("../../utilities/filter");
 
 const addNotice = async ({ body, user: { _id } }) =>
   await NoticeModel.create({ ...body, owner: _id });
-const addNoticeToFavorite = async ({ id, user: { _id } }) =>
-  await NoticeModel.findByIdAndUpdate(id, { favorite: _id });
-const deleteNoticeFromFavorite = async (id) =>
-  await NoticeModel.findByIdAndDelete(id);
+
+  const getFavoriteByOwner = async ({_id , search , age , gender}) => {
+    // console.log(_id, search, age, gender);
+    const filter = filterNotices({_id ,category: "", search , age , gender});
+    // console.log(filter);
+  return await NoticeModel.find(filter);
+}
+  // await NoticeModel.find({ owner: _id, favorite: { $in: [_id] }});
+
+const addNoticeToFavorite = async (id, _id) =>{
+  const dubl = await NoticeModel.findOne({
+    _id: id,
+    owner: _id,
+    favorite: { $in: [_id] }
+  });
+
+  if (dubl) throw HttpError(409, `Notice with id:${id} is already in favorites`);
+  return await NoticeModel.findOneAndUpdate({ _id: id, owner: _id}, { $push: { favorite: _id } }, { new: true, });
+}
+const deleteNoticeFromFavorite = async (id, _id) => 
+  await NoticeModel.findOneAndUpdate(
+    { _id: id, owner: _id, favorite: _id },
+    { $pull: { favorite: _id } },
+    { new: true }
+  );
+
 const getOneNotice = async ({ id }) => await NoticeModel.findById(id);
 const getNoticeCategory = async ({ query: { category, search, age, gender } }) => {
   const conditions = {
@@ -50,13 +74,14 @@ const getNoticeCategory = async ({ query: { category, search, age, gender } }) =
 };
 // const getNoticeCategory = async ({ query: { category } }) =>
 //   await NoticeModel.find({ category: decodeURIComponent(category) });
-const getNoticeByOwnerId = async (id, user) =>
-  await NoticeModel.find({ owner: user._id, _id: id });
+const getNoticeByOwnerId = async ({_id , search , age , gender}) =>
+  await NoticeModel.find(filterNotices({_id ,category: "", search , age , gender}));
 const deleteNotice = async (id, user) =>
   await NoticeModel.findOneAndRemove({ owner: user._id, _id: id });
 
 module.exports = {
   addNotice,
+  getFavoriteByOwner,
   addNoticeToFavorite,
   deleteNoticeFromFavorite,
   getNoticeCategory,

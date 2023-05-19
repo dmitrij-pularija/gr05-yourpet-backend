@@ -52,12 +52,10 @@ const noticeSchema = new Schema(
 			ref: "user",
 			required: true,
 		},
-		favorite: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: "user",
-			},
-		],
+		favorite: {
+			type: [Schema.Types.ObjectId],
+			default: [],
+		  },
 		email: {
 			type: String,
 			required: true,
