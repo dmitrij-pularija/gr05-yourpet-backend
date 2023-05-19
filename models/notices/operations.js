@@ -16,16 +16,15 @@ const addNotice = async ({ body, user: { _id } }) =>
 const addNoticeToFavorite = async (id, _id) =>{
   const dubl = await NoticeModel.findOne({
     _id: id,
-    owner: _id,
     favorite: { $in: [_id] }
   });
 
   if (dubl) throw HttpError(409, `Notice with id:${id} is already in favorites`);
-  return await NoticeModel.findOneAndUpdate({ _id: id, owner: _id}, { $push: { favorite: _id } }, { new: true, });
+  return await NoticeModel.findOneAndUpdate({ _id: id }, { $push: { favorite: _id } }, { new: true, });
 }
 const deleteNoticeFromFavorite = async (id, _id) => 
   await NoticeModel.findOneAndUpdate(
-    { _id: id, owner: _id, favorite: _id },
+    { _id: id, favorite: { $in: [_id] } },
     { $pull: { favorite: _id } },
     { new: true }
   );
