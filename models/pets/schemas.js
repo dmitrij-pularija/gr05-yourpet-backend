@@ -24,7 +24,7 @@ const petSchema = new Schema(
       minLength: 8,
       maxLength: 120,
     },
-    petsURL: {
+    photoURL: {
       type: String,
       default: "",
     },

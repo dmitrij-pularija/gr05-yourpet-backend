@@ -36,12 +36,11 @@ const delImage = async (req, res) => {
     const { id } = req.params;
     const owner = req.user._id;
     const pet = await Pets.findOne({ owner: owner, _id: id });
-    console.log(pet);
 
     if (!pet) {
       return res.status(404).json({ message: "Pet not found" });
     }
-    pet.petsURL = "";
+    pet.photoURL = "";
     await pet.save();
 
     return res.status(200).json({ message: "Photo deleted successfully" });
@@ -67,7 +66,7 @@ const addImagePets = async ({
       return res.status(400).json({ message: "Empty body" });
     }
 
-    pet.petsURL = cloudinaryURL;
+    pet.photoURL = cloudinaryURL;
     const updatedPet = await pet.save();
 
     if (updatedPet) {

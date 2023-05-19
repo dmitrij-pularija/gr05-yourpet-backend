@@ -9,8 +9,10 @@ const schema = {
       .pattern(/^\d{2}\.\d{2}\.\d{4}$/)
       .required(),
     breed: Joi.string().min(2).max(16).required(),
-    image: Joi.string(),
+    photoURL: Joi.string(),
     comments: Joi.string().min(8).max(120),
+    owner: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/),
   }),
   edit: Joi.object({
     name: Joi.string().min(3).max(20),
@@ -29,7 +31,6 @@ const addValidation = ({ body }, res, next) => {
     return res.status(400).json({ message: "missing fields" });
   }
   const { error } = schema.add.validate(body, { abortEarly: false });
-
   if (error) {
     return res.status(400).json({
       message: `missing required ${error.details[0].context.label} field`,
