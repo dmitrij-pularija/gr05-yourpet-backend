@@ -10,7 +10,8 @@ const addNotice = async ({ body, user: { _id } }) =>
     const limit = parseInt(perpage) || 20;
     const skip = (pageNumber - 1) * limit;
 
-    const filter = filterNotices({_id ,category: "", search , age , gender});
+    const filter = filterNotices({ type: "favorite", _id ,category: "", search , age , gender});
+    console.log(filter);
     const totalCount = await NoticeModel.find(filter).count();
     const data = await NoticeModel.find(filter).skip(skip).limit(limit).sort({ createdAt: "descending" });
     return await { page: pageNumber, total: totalCount, data };  
@@ -89,7 +90,7 @@ const pageNumber = parseInt(page) || 1;
     const limit = parseInt(perpage) || 20;
     const skip = (pageNumber - 1) * limit;
 
-    const filter = filterNotices({_id ,category: "", search , age , gender});
+    const filter = filterNotices({ type: "owner", _id ,category: "", search , age , gender});
     const totalCount = await NoticeModel.find(filter).count();
     const data = await NoticeModel.find(filter).skip(skip).limit(limit).sort({ createdAt: "descending" });
     return await { page: pageNumber, total: totalCount, data };  

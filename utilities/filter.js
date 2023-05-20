@@ -1,4 +1,4 @@
-const filterNotices = ({_id, category, search , age , gender}) => {
+const filterNotices = ({type, _id, category, search , age , gender}) => {
     // console.log(_id, category, search, age, gender);
     const conditions = {};
     if (_id) {
@@ -6,8 +6,8 @@ const filterNotices = ({_id, category, search , age , gender}) => {
     //     { owner: _id },
     //     { favorite: { $in: [_id] } }
     // ];
-    conditions.owner = _id ;
-    conditions.favorite = { $in: [_id] };
+    if (type === 'owner') conditions.owner = _id ;
+    if (type === 'favorite') conditions.favorite = { $in: [_id] };
     };
     if (category) {
         conditions.category = {
