@@ -40,7 +40,7 @@ const schema = {
 			.required(),
 	}),
 	getCategory: Joi.object({
-		category: Joi.string().valid("sell", "lost/found", "In good hands"),
+		category: Joi.string().valid('sell', 'lost-found', 'for-free', 'favorite', 'own').required(),
 		search: Joi.string().min(3).max(30),
 		page: Joi.string().min(1).max(4),
 		perpage: Joi.string().min(1).max(3),
@@ -52,7 +52,7 @@ const schema = {
 			then: Joi.required(),
 			otherwise: Joi.forbidden()
 		})  
-	}).or('category', 'search', 'page', 'perpage', 'age', 'gender'),
+	}).or('category','search', 'page', 'perpage', 'age', 'gender'),
 };
 
 const addNoticeValidation = ({ body }, res, next) => {
@@ -62,8 +62,9 @@ const addNoticeValidation = ({ body }, res, next) => {
 
 	next();
 };
-const getNoticeCategoryValidation = ({ query }, res, next) => {
-	const { error } = schema.getCategory.validate( query );
+const getNoticeCategoryValidation = ({ query, params }, res, next) => {
+	const { error } = schema.getCategory.validate({...query, ...params});
+	console.log();
 	if (error) {
 		return res.status(400).json({
 			error: error.message

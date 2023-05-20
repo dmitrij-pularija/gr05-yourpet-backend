@@ -2,18 +2,20 @@ const express = require("express");
 const router = express.Router();
 
 const ctrlWrapper = require("../../decorators/ctrlWrapper");
+const privateWrapper = require("../../decorators/privateWrapper");
 const authenticate = require("../../middleware/authenticate");
 
 const {
-	add,
-	getFavorite,
+	addNotice,
+	delNotice,
+	selecQuery,
+	// getFavorite,
 	addFavorite,
-	getCategory,
-	// getOne,
+	// getCategory,
+	getNoticeById,
 	// getByTitle,
-	getByOwnerId,
-	delFavourite,
-	del,
+	// getByOwnerId,
+	delFavorite,
 } = require("../../controllers/notices");
 
 const {
@@ -21,14 +23,17 @@ const {
 	getNoticeCategoryValidation,
 } = require("../../middleware/noticeValidation");
 
-router.get("/", getNoticeCategoryValidation, ctrlWrapper(getCategory));
-// router.get("/:id", ctrlWrapper(getOne));
-// router.get("/find", ctrlWrapper(getByTitle));
-router.get("/owner", authenticate, ctrlWrapper(getByOwnerId));
-router.post("/", authenticate, addNoticeValidation, ctrlWrapper(add));
-router.delete("/:id", authenticate, ctrlWrapper(del));
-router.get("/favorite/owner", authenticate, ctrlWrapper(getFavorite));
+// private(authenticate),
+router.get("/:category", getNoticeCategoryValidation, privateWrapper(authenticate), ctrlWrapper(selecQuery));
+
+// router.get("/", getNoticeCategoryValidation, ctrlWrapper(getCategory));
+router.get("/id/:id", ctrlWrapper(getNoticeById));
+// // router.get("/find", ctrlWrapper(getByTitle));
+// router.get("/owner", authenticate, ctrlWrapper(getByOwnerId));
+router.post("/", authenticate, addNoticeValidation, ctrlWrapper(addNotice));
+router.delete("/:id", authenticate, ctrlWrapper(delNotice));
+// router.get("/favorite/owner", authenticate, ctrlWrapper(getFavorite));
 router.post("/favorite/:id", authenticate, ctrlWrapper(addFavorite));
-router.delete("/favorite/:id", authenticate, ctrlWrapper(delFavourite));
+router.delete("/favorite/:id", authenticate, ctrlWrapper(delFavorite));
 
 module.exports = router;
