@@ -43,7 +43,7 @@ const schema = {
 		category: Joi.string().valid("sell", "lost/found", "In good hands"),
 		search: Joi.string().min(3).max(30),
 		page: Joi.string().min(1).max(4),
-		perpage: Joi.string().min(2).max(3),
+		perpage: Joi.string().min(1).max(3),
 		age: Joi.string().valid("1", "2", "3-12").when(Joi.exist(), {
 			then: Joi.required(),
 			otherwise: Joi.forbidden()

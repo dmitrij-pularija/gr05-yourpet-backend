@@ -1,5 +1,5 @@
 const filterNotices = ({_id, category, search , age , gender}) => {
-    console.log(_id, category, search, age, gender);
+    // console.log(_id, category, search, age, gender);
     const conditions = {};
     if (_id) {
     // conditions.$and = [

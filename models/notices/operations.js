@@ -5,11 +5,17 @@ const filterNotices = require("../../utilities/filter");
 const addNotice = async ({ body, user: { _id } }) =>
   await NoticeModel.create({ ...body, owner: _id });
 
-  const getFavoriteByOwner = async ({_id , search , age , gender}) => {
-    // console.log(_id, search, age, gender);
+  const getFavoriteByOwner = async ({_id , search , age , gender, page, perpage}) => {
+    const pageNumber = parseInt(page) || 1;
+    const limit = parseInt(perpage) || 20;
+    const skip = (pageNumber - 1) * limit;
+
     const filter = filterNotices({_id ,category: "", search , age , gender});
-    // console.log(filter);
-  return await NoticeModel.find(filter);
+    const totalCount = await NoticeModel.find(filter).count();
+    const data = await NoticeModel.find(filter).skip(skip).limit(limit).sort({ createdAt: "descending" });
+    return await { page: pageNumber, total: totalCount, data };  
+
+  // return await NoticeModel.find(filter);
 }
   // await NoticeModel.find({ owner: _id, favorite: { $in: [_id] }});
 
@@ -30,7 +36,11 @@ const deleteNoticeFromFavorite = async (id, _id) =>
   );
 
 const getOneNotice = async ({ id }) => await NoticeModel.findById(id);
-const getNoticeCategory = async ({ query: { category, search, age, gender } }) => {
+const getNoticeCategory = async ({ query: { category, search, age, gender, page, perpage } }) => {
+  const pageNumber = parseInt(page) || 1;
+  const limit = parseInt(perpage) || 20;
+  const skip = (pageNumber - 1) * limit;
+
   const conditions = {
     category: decodeURIComponent(category),
   };
@@ -68,13 +78,23 @@ const getNoticeCategory = async ({ query: { category, search, age, gender } }) =
   if (gender) {
     conditions.sex = { $regex: new RegExp(gender, "i") };
   }
-
-  return await NoticeModel.find(conditions);  
+  const totalCount = await NoticeModel.find(conditions).count();
+  const data = await NoticeModel.find(conditions).skip(skip).limit(limit).sort({ createdAt: "descending" });
+  return await { page: pageNumber, total: totalCount, data };  
 };
 // const getNoticeCategory = async ({ query: { category } }) =>
 //   await NoticeModel.find({ category: decodeURIComponent(category) });
-const getNoticeByOwnerId = async ({_id , search , age , gender}) =>
-  await NoticeModel.find(filterNotices({_id ,category: "", search , age , gender}));
+const getNoticeByOwnerId = async ({_id , search , age , gender, page, perpage}) => {
+const pageNumber = parseInt(page) || 1;
+    const limit = parseInt(perpage) || 20;
+    const skip = (pageNumber - 1) * limit;
+
+    const filter = filterNotices({_id ,category: "", search , age , gender});
+    const totalCount = await NoticeModel.find(filter).count();
+    const data = await NoticeModel.find(filter).skip(skip).limit(limit).sort({ createdAt: "descending" });
+    return await { page: pageNumber, total: totalCount, data };  
+  // await NoticeModel.find(filterNotices({_id ,category: "", search , age , gender}));
+} 
 const deleteNotice = async (id, user) =>
   await NoticeModel.findOneAndRemove({ owner: user._id, _id: id });
 
