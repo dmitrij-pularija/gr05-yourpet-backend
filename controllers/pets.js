@@ -20,24 +20,6 @@ const del = async (req, res) => {
   res.status(200).json({ message: "Pet deleted" });
 };
 
-const delImage = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const owner = req.user._id;
-    const pet = await Pets.findOne({ owner: owner, _id: id });
-
-    if (!pet) {
-      return res.status(404).json({ message: "Pet not found" });
-    }
-    pet.photoURL = "";
-    await pet.save();
-
-    return res.status(200).json({ message: "Photo deleted successfully" });
-  } catch (error) {
-    return res.status(500).json({ message: "Server Error" });
-  }
-};
-
 const addImageAndPet = async (req, res) => {
   const { _id: owner } = req.user;
   const { name } = req.body;
@@ -59,6 +41,23 @@ const addImageAndPet = async (req, res) => {
   res.status(201).json({
     result,
   });
+};
+
+const delImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const owner = req.user._id;
+    const pet = await Pets.findOne({ owner: owner, _id: id });
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    pet.petsURL = null;
+    await pet.save();
+    return res.status(200).json({ message: "Photo deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
 };
 
 module.exports = { listPets, del, delImage, addImageAndPet };

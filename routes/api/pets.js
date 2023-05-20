@@ -19,7 +19,7 @@ const {
 
 router.get("/", authenticate, listPets);
 
-router.post(
+router.patch(
   "/update",
   authenticate,
   addValidation,
