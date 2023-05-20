@@ -1,58 +1,53 @@
-const Joi = require("joi");
 const { isValidObjectId } = require("mongoose");
-const getError = require("../utilities/validationError");
+const Joi = require("joi");
+const formidable = require("formidable");
 
 const schema = {
-  add: Joi.object({
-    name: Joi.string().min(2).max(16).required(),
+  addAll: Joi.object({
+    name: Joi.string().min(2).max(16).required().messages({
+      "any.required": "Please provide a name for the pet",
+      "string.min": "Name must have at least 2 characters",
+      "string.max": "Name cannot exceed 16 characters",
+      "string.pattern.base": "Name can only contain letters",
+    }),
     birthday: Joi.string()
       .pattern(/^\d{2}\.\d{2}\.\d{4}$/)
-      .required(),
-    breed: Joi.string().min(2).max(16).required(),
-    photoURL: Joi.string(),
-    comments: Joi.string().min(8).max(120),
-    owner: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/),
-  }),
-  edit: Joi.object({
-    name: Joi.string().min(3).max(20),
-    email: Joi.string().email(),
-    phone: Joi.string().min(6).max(20),
-  })
-    .or("name", "phone", "email")
-    .unknown(false),
-  fav: Joi.object({
-    favorite: Joi.boolean().required(),
-  }).unknown(false),
+      .required()
+      .messages({
+        "any.required": "Please specify the pet's date of birth",
+        "string.pattern.base": "Invalid date format (must be dd.mm.yyyy)",
+      }),
+    breed: Joi.string().min(2).max(16).required().messages({
+      "any.required": "Please specify the pet's breed",
+      "string.min": "Breed must have at least 2 characters",
+      "string.max": "Breed cannot exceed 16 characters",
+      "string.pattern.base": "Breed can only contain letters",
+    }),
+    comments: Joi.string().min(8).max(320).allow("").messages({
+      "string.min": "Comments must have at least 8 characters",
+      "string.max": "Comments cannot exceed 320 characters",
+    }),
+    photoURL: Joi.string().allow("").optional(),
+  }).options({ abortEarly: false }),
 };
 
-const addValidation = ({ body }, res, next) => {
-  if (Object.keys(body).length === 0) {
-    return res.status(400).json({ message: "missing fields" });
-  }
-  const { error } = schema.add.validate(body, { abortEarly: false });
-  if (error) {
-    return res.status(400).json({
-      message: `missing required ${error.details[0].context.label} field`,
-    });
-  }
-  next();
-};
+const addValidation = ({ body }, req, res, next) => {
+  const form = new formidable.IncomingForm();
 
-const editValidation = ({ body }, res, next) => {
-  const { error } = schema.edit.validate(body);
+  form.parse(req, (err, fields) => {
+    if (err) {
+      console.error("Failed to process form data:", err);
+      return res.status(400).json({ errors: ["Failed to process form data"] });
+    }
+    const { error } = schema.add.validate(body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json({ errors });
+    }
 
-  if (error) return res.status(400).json({ message: getError(error, "edit") });
-
-  next();
-};
-
-const favValidation = ({ body }, res, next) => {
-  const { error } = schema.fav.validate(body);
-
-  if (error) return res.status(400).json({ message: getError(error, "fav") });
-
-  next();
+    console.log("Valid Request Body:", fields);
+    next();
+  });
 };
 
 const isValidId = (req, res, next) => {
@@ -63,4 +58,4 @@ const isValidId = (req, res, next) => {
   next();
 };
 
-module.exports = { addValidation, editValidation, favValidation, isValidId };
+module.exports = { addValidation, isValidId };

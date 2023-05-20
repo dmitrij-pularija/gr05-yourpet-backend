@@ -11,17 +11,6 @@ const listPets = async (req, res) => {
   res.status(200).json(UserPets);
 };
 
-const add = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { name } = req.body;
-  const result = await Pets.findOne({ name });
-  if (result) {
-    return res.status(409).json({ message: "Pet already exists" });
-  }
-  const newPet = await Pets.create({ ...req.body, owner });
-  res.status(201).json(newPet);
-};
-
 const del = async (req, res) => {
   const { id } = req.params;
   const result = await Pets.findByIdAndRemove(id);
@@ -49,32 +38,27 @@ const delImage = async (req, res) => {
   }
 };
 
-const addImagePets = async ({
-  file: { path: cloudinaryURL },
-  user: { _id },
-  res,
-}) => {
-  try {
-    const ownerId = _id;
-    const pet = await Pets.findOne({ owner: ownerId });
-
-    if (!pet) {
-      return res.status(404).json({ message: "No pet found" });
-    }
-
-    if (!cloudinaryURL) {
-      return res.status(400).json({ message: "Empty body" });
-    }
-
-    pet.photoURL = cloudinaryURL;
-    const updatedPet = await pet.save();
-
-    if (updatedPet) {
-      return res.status(201).json({ message: "Successfully added" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Server Error" });
+const addImageAndPet = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { name } = req.body;
+  const duplicate = await Pets.findOne({ name });
+  if (duplicate) {
+    return res.status(409).json({ message: "Pet already exists" });
   }
+  if (!req.body) {
+    return res.status(400).json({ message: `The fild is empty` });
+  }
+  if (!req.file) {
+    return res.status(400).json({ message: `The file is not loaded` });
+  }
+  const result = await Pets.create({
+    ...req.body,
+    petsURL: req.file.path,
+    owner,
+  });
+  res.status(201).json({
+    result,
+  });
 };
 
-module.exports = { listPets, add, del, delImage, addImagePets };
+module.exports = { listPets, del, delImage, addImageAndPet };
