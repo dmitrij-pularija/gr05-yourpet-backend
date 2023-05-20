@@ -6,10 +6,9 @@ const ctrl = require("../../decorators/ctrlWrap");
 const authenticate = require("../../middleware/authenticate");
 const {
   listPets,
-  add,
   del,
-  addImagePets,
   delImage,
+  addImageAndPet,
 } = require("../../controllers/pets.js");
 const uploads = require("../../middleware/upload");
 
@@ -20,13 +19,12 @@ const {
 
 router.get("/", authenticate, listPets);
 
-router.post("/", authenticate, addValidation, ctrl(add));
-
 router.patch(
-  "/add",
+  "/update",
   authenticate,
+  addValidation,
   uploads.pets.single("pet"),
-  ctrl(addImagePets)
+  ctrl(addImageAndPet)
 );
 
 router.delete("/delete-photo/:id", authenticate, ctrl(delImage));
