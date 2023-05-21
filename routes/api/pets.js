@@ -14,7 +14,7 @@ const {
 router.get("/", authenticate, listPets);
 
 router.post(
-  "/update",
+  "/",
   authenticate,
   addValidation,
   uploads.pets.single("pet"),
