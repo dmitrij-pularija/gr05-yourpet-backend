@@ -45,12 +45,10 @@ const noticeSchema = new Schema(
 		},
 		image: {
 			type: String,
-			required: true,
 		},
 		owner: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
-			required: true,
 		},
 		favorite: {
 			type: [Schema.Types.ObjectId],
@@ -58,11 +56,9 @@ const noticeSchema = new Schema(
 		  },
 		email: {
 			type: String,
-			required: true,
 		},
 		phone: {
 			type: String,
-			required: true,
 		},
 	},
 	{ versionKey: false, timestamps: true }

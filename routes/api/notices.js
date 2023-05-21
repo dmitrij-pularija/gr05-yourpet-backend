@@ -4,6 +4,7 @@ const router = express.Router();
 const ctrlWrapper = require("../../decorators/ctrlWrapper");
 const privateWrapper = require("../../decorators/privateWrapper");
 const authenticate = require("../../middleware/authenticate");
+const uploads = require("../../middleware/upload");
 
 const {
 	addNotice,
@@ -30,7 +31,8 @@ router.get("/:category", getNoticeCategoryValidation, privateWrapper(authenticat
 router.get("/id/:id", ctrlWrapper(getNoticeById));
 // // router.get("/find", ctrlWrapper(getByTitle));
 // router.get("/owner", authenticate, ctrlWrapper(getByOwnerId));
-router.post("/", authenticate, addNoticeValidation, ctrlWrapper(addNotice));
+// addNoticeValidation,
+router.post("/", authenticate,  uploads.pets.single("pet"), ctrlWrapper(addNotice));
 router.delete("/:id", authenticate, ctrlWrapper(delNotice));
 // router.get("/favorite/owner", authenticate, ctrlWrapper(getFavorite));
 router.post("/favorite/:id", authenticate, ctrlWrapper(addFavorite));

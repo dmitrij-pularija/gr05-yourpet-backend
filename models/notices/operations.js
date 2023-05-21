@@ -8,8 +8,12 @@ const categories = {
   "for-free": "In good hands"
 };
 
-const createNotice = async ({ body, user: { _id } }) =>
-  await NoticeModel.create({ ...body, owner: _id });
+const createNotice = async ({ body, file: { path }, user: { _id, email, phone } }) => {
+  const { name } = body;
+  const dubl = await NoticeModel.findOne({ name });
+  if (dubl) throw HttpError(409, `Pet with name ${name} is already in notices`);
+  return await NoticeModel.create({ ...body, image: path, owner: _id, email, phone });
+}
 
 const getFavoriteByOwner = async ({
   _id,
