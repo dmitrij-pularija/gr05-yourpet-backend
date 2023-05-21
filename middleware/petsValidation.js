@@ -3,7 +3,7 @@ const Joi = require("joi");
 const formidable = require("formidable");
 
 const schema = {
-  addAll: Joi.object({
+  add: Joi.object({
     name: Joi.string().min(2).max(16).required().messages({
       "any.required": "Please provide a name for the pet",
       "string.min": "Name must have at least 2 characters",
@@ -27,7 +27,7 @@ const schema = {
       "string.min": "Comments must have at least 8 characters",
       "string.max": "Comments cannot exceed 320 characters",
     }),
-    photoURL: Joi.string().allow("").optional(),
+    petsURL: Joi.string().allow("").optional(),
   }).options({ abortEarly: false }),
 };
 
