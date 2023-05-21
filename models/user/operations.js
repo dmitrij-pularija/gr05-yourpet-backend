@@ -52,7 +52,7 @@ const getCurrentUser = async (
 
 const updateUser = async (body, _id) => {
 	const { name, email, city, phone, birthday, avatarURL } =
-		await User.findByIdAndUpdate(_id, body);
+		await User.findByIdAndUpdate(_id, body, { new: true });
 	return { user: { _id, name, email, city, phone, birthday, avatarURL } };
 };
 
