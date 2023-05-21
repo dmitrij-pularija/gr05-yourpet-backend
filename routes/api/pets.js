@@ -7,7 +7,6 @@ const authenticate = require("../../middleware/authenticate");
 const {
   listPets,
   del,
-  delImage,
   addImageAndPet,
 } = require("../../controllers/pets.js");
 const uploads = require("../../middleware/upload");
@@ -19,7 +18,7 @@ const {
 
 router.get("/", authenticate, listPets);
 
-router.patch(
+router.post(
   "/update",
   authenticate,
   addValidation,
@@ -27,7 +26,6 @@ router.patch(
   ctrl(addImageAndPet)
 );
 
-router.delete("/delete-photo/:id", authenticate, ctrl(delImage));
 
 router.delete("/:id", authenticate, isValidId, ctrl(del));
 
