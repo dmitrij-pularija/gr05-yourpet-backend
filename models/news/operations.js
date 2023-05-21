@@ -18,14 +18,17 @@ const getNews = async (req, res) => {
 
     const newsCountQuery = NewsModel.countDocuments(query);
 
-    const [news, totalNewsCount] = await Promise.all([
+    const [data, totalNewsCount] = await Promise.all([
       newsQuery,
       newsCountQuery,
     ]);
 
+    const totalPages = Math.ceil(totalNewsCount / limit);
+
     res.json({
+      totalPages,
       totalNewsCount,
-      news,
+      data,
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
