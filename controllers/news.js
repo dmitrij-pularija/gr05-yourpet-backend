@@ -1,6 +1,5 @@
-const { listNews, getNewsByTitle } = require("../models/news/operations");
+const { getNews } = require("../models/news/operations");
 
-const getAll = async (req) => await listNews(req);
-const getByTitle = async (req) => await getNewsByTitle(req);
+const getAllNews = async (req, res) => await getNews(req, res);
 
-module.exports = { getAll, getByTitle };
+module.exports = { getAllNews };

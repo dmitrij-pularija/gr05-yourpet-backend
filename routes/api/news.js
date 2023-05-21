@@ -3,9 +3,8 @@ const router = express.Router();
 
 const ctrlWrapper = require("../../decorators/ctrlWrapper");
 
-const { getAll, getByTitle } = require("../../controllers/news");
+const { getAllNews } = require("../../controllers/news");
 
-router.get("/", ctrlWrapper(getAll));
-router.get("/title", ctrlWrapper(getByTitle));
+router.get("/", ctrlWrapper(getAllNews));
 
 module.exports = router;
