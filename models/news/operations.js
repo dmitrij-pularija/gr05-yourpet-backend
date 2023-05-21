@@ -2,13 +2,13 @@ const NewsModel = require("./schemas");
 
 const getNews = async (req, res) => {
   try {
-    const { page, perPage, title } = req.query;
+    const { page, perpage, search } = req.query;
     const pageNumber = parseInt(page) || 1;
-    const limit = parseInt(perPage) || 20;
+    const limit = parseInt(perpage) || 20;
     const skip = (pageNumber - 1) * limit;
 
     const query = {
-      title: { $regex: new RegExp(title, "i") },
+      title: { $regex: new RegExp(search, "i") },
     };
 
     const newsQuery = NewsModel.find(query)
@@ -23,11 +23,9 @@ const getNews = async (req, res) => {
       newsCountQuery,
     ]);
 
-    const totalPages = Math.ceil(totalNewsCount / limit);
-
     res.json({
-      totalPages,
-      totalNewsCount,
+      page: pageNumber,
+      total: totalNewsCount,
       data,
     });
   } catch (error) {
