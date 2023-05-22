@@ -5,15 +5,8 @@ const filterNotices = require("../../utilities/filter");
 const categories = {
   "sell": "sell",
   "lost-found": "lost/found",
-  "for-free": "In good hands"
+  "for-free": "In good hands",
 };
-
-const createNotice = async ({ body, file: { path }, user: { _id, email, phone } }) => {
-  const { name } = body;
-  const dubl = await NoticeModel.findOne({ name, owner: _id, });
-  if (dubl) throw HttpError(409, `Pet with name ${name} is already in your notices`);
-  return await NoticeModel.create({ ...body, image: path, owner: _id, email, phone });
-}
 
 const getFavoriteByOwner = async ({
   _id,
@@ -41,10 +34,7 @@ const getFavoriteByOwner = async ({
     .limit(limit)
     .sort({ createdAt: "descending" });
   return await { page: pageNumber, total: totalCount, data };
-
-  // return await NoticeModel.find(filter);
 };
-// await NoticeModel.find({ owner: _id, favorite: { $in: [_id] }});
 
 const addNoticeToFavorite = async (id, _id) => {
   const dubl = await NoticeModel.findOne({
@@ -60,12 +50,31 @@ const addNoticeToFavorite = async (id, _id) => {
     { new: true }
   );
 };
+
 const deleteNoticeFromFavorite = async (id, _id) =>
   await NoticeModel.findOneAndUpdate(
     { _id: id, favorite: { $in: [_id] } },
     { $pull: { favorite: _id } },
     { new: true }
   );
+
+const createNotice = async ({
+  body,
+  file: { path },
+  user: { _id, email, phone },
+}) => {
+  const { name } = body;
+  const dubl = await NoticeModel.findOne({ name, owner: _id });
+  if (dubl)
+    throw HttpError(409, `Pet with name ${name} is already in your notices`);
+  return await NoticeModel.create({
+    ...body,
+    image: path,
+    owner: _id,
+    email,
+    phone,
+  });
+};
 
 const getNoticeInfById = async (id) => await NoticeModel.findById(id);
 
@@ -80,10 +89,6 @@ const getNoticeByCategory = async ({
   const pageNumber = parseInt(page) || 1;
   const limit = parseInt(perpage) || 20;
   const skip = (pageNumber - 1) * limit;
-  // let cat = '';
-  // if (category === "sell") cat = "sell";
-  // if (category === "lost-found") cat = "lost/found";
-  // if (category === "for-free") cat = "In good hands";
   const selectedCategory = categories[category];
 
   const filter = filterNotices({
@@ -93,68 +98,6 @@ const getNoticeByCategory = async ({
     age,
     gender,
   });
-
-  // const conditions = {
-  //   category: selectedCategory,
-  // };
-
-  // if (search) {
-  //   conditions.$or = [
-  //     { title: { $regex: new RegExp(decodeURIComponent(search), "i") } },
-  //     { name: { $regex: new RegExp(decodeURIComponent(search), "i") } },
-  //     { breed: { $regex: new RegExp(decodeURIComponent(search), "i") } },
-  //     { comments: { $regex: new RegExp(decodeURIComponent(search), "i") } },
-  //   ];
-  // }
-
-  // if (age) {
-  //   const today = new Date();
-
-  //   if (age === "1") {
-  //     conditions.birthday = {
-  //       $gte: new Date(
-  //         today.getFullYear() - 2,
-  //         today.getMonth(),
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //       $lt: new Date(
-  //         today.getFullYear() - 1,
-  //         today.getMonth(),
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //     };
-  //   } else if (age === "2") {
-  //     conditions.birthday = {
-  //       $gte: new Date(
-  //         today.getFullYear() - 3,
-  //         today.getMonth(),
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //       $lt: new Date(
-  //         today.getFullYear() - 2,
-  //         today.getMonth(),
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //     };
-  //   } else if (age === "3-12") {
-  //     conditions.birthday = {
-  //       $gte: new Date(
-  //         today.getFullYear(),
-  //         today.getMonth() - 12,
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //       $lt: new Date(
-  //         today.getFullYear(),
-  //         today.getMonth() - 3,
-  //         today.getDate()
-  //       ).toLocaleDateString("ru-RU"),
-  //     };
-  //   }
-  // }
-
-  // if (gender) {
-  //   conditions.sex = { $regex: new RegExp(gender, "i") };
-  // }
   const totalCount = await NoticeModel.find(filter).count();
   const data = await NoticeModel.find(filter)
     .skip(skip)
@@ -162,8 +105,7 @@ const getNoticeByCategory = async ({
     .sort({ createdAt: "descending" });
   return await { page: pageNumber, total: totalCount, data };
 };
-// const getNoticeCategory = async ({ query: { category } }) =>
-//   await NoticeModel.find({ category: decodeURIComponent(category) });
+
 const getNoticeByOwnerId = async ({
   _id,
   category,
@@ -190,8 +132,8 @@ const getNoticeByOwnerId = async ({
     .limit(limit)
     .sort({ createdAt: "descending" });
   return await { page: pageNumber, total: totalCount, data };
-  // await NoticeModel.find(filterNotices({_id ,category: "", search , age , gender}));
 };
+
 const deleteNotice = async (id, user) =>
   await NoticeModel.findOneAndRemove({ owner: user._id, _id: id });
 
@@ -201,7 +143,6 @@ module.exports = {
   addNoticeToFavorite,
   deleteNoticeFromFavorite,
   getNoticeByCategory,
-  // getNoticeByTitle,
   getNoticeByOwnerId,
   getNoticeInfById,
   deleteNotice,
