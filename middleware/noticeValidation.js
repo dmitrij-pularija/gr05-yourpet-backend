@@ -25,7 +25,7 @@ const schema = {
       .when("category", {
         is: "sell",
         then: Joi.string().min(1).max(10).required(),
-        otherwise: Joi.forbidden(),
+        otherwise: Joi.optional(),
       }),
     comments: Joi.string()
       .min(8)
