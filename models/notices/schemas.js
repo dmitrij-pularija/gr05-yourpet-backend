@@ -39,6 +39,7 @@ const noticeSchema = new Schema(
 		},
 		price: {
 			type: String,
+			default: "",
 		},
 		comments: {
 			type: String,
@@ -56,9 +57,11 @@ const noticeSchema = new Schema(
 		  },
 		email: {
 			type: String,
+			default: "",
 		},
 		phone: {
 			type: String,
+			default: "",
 		},
 	},
 	{ versionKey: false, timestamps: true }
