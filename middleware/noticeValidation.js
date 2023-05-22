@@ -20,12 +20,12 @@ const schema = {
         then: Joi.required(),
         otherwise: Joi.optional(),
       }),
-    price: Joi.number()
+      price: Joi.string()
       .min(0)
       .when("category", {
         is: "sell",
-        then: Joi.number().min(1).required(),
-        otherwise: Joi.optional(),
+        then: Joi.string().min(1).max(10).required(),
+        otherwise: Joi.forbidden(),
       }),
     comments: Joi.string()
       .min(8)
