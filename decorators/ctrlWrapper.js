@@ -20,15 +20,17 @@ const ctrlWrapper = (ctrl) => {
       const result = await ctrl(req, res, next);
 
       if (name === "addFavorite" && result)
-        return res
-          .status(200)
-          .json({
-            message: `Notice with id:${id} successfully added to favorites`,
-          });
+        return res.status(200).json({
+          message: `Notice with id:${id} successfully added to favorites`,
+        });
       if (name === "delFavorite" && result)
         return res
           .status(200)
           .json({ message: `Notice with id:${id} deleted from favorite` });
+      if (name === "delNotice" && result)
+        return res
+          .status(200)
+          .json({ message: `Notice with id:${id} successfully deleted` });
       if (!result) throw HttpError(404);
 
       return res.status(200).json(result);
