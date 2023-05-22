@@ -12,10 +12,12 @@ const {
 
 const selecQuery = async (req) => {
     const {	params: { category }, query: { search, age, gender, page, perpage } } = req;
-
+	// if (req.user) {
+		// const {	user: { _id } } = req;	
     // if (req.user) {const {	user: { _id } } = req; } 
-	if (category === 'favorite') return await getFavoriteByOwner({ _id: req.user._id, search , age , gender, page, perpage });
-	if (category === 'own') return await getNoticeByOwnerId({_id: req.user._id, search , age , gender, page, perpage});
+	if (category === 'favorite') return await getFavoriteByOwner({ _id: req.user._id, category, search , age , gender, page, perpage });
+	if (category === 'own') return await getNoticeByOwnerId({_id: req.user._id, category, search , age , gender, page, perpage});
+// }
     return await getNoticeByCategory({ category, search , age , gender, page, perpage });
 }
 

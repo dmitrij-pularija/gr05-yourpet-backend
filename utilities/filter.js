@@ -1,19 +1,15 @@
-const filterNotices = ({type, _id, category, search , age , gender}) => {
+const filterNotices = ({_id, category, search , age , gender}) => {
     // console.log(_id, category, search, age, gender);
     const conditions = {};
-    if (_id) {
+    // if (_id) {
     // conditions.$and = [
     //     { owner: _id },
     //     { favorite: { $in: [_id] } }
     // ];
-    if (type === 'owner') conditions.owner = _id ;
-    if (type === 'favorite') conditions.favorite = { $in: [_id] };
-    };
-    if (category) {
-        conditions.category = {
-            category: decodeURIComponent(category),
-          };
-        }
+    if (category === 'own') conditions.owner = _id ;
+    if (category === 'favorite') conditions.favorite = { $in: [_id] };
+    // };
+    if (!_id) conditions.category = category;
 
       if (search) {
         conditions.$or = [
@@ -45,9 +41,8 @@ const filterNotices = ({type, _id, category, search , age , gender}) => {
         }
       }
       if (gender) {
-        console.log('sex');
         conditions.sex = gender;
-      }
+      }      
       return conditions;
 };
 
