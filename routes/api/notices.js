@@ -31,6 +31,7 @@ router.post(
   "/",
   authenticate,
   uploads.pets.single("pet"),
+  addNoticeValidation,
   ctrlWrapper(addNotice)
 );
 router.delete("/:id", authenticate, ctrlWrapper(delNotice));
