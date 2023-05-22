@@ -23,24 +23,26 @@ const del = async (req, res) => {
 const addImageAndPet = async (req, res) => {
   const { _id: owner } = req.user;
   const { name } = req.body;
-  const duplicate = await Pets.findOne({ name });
+
+  const duplicate = await Pets.findOne({ name, owner });
   if (duplicate) {
     return res.status(409).json({ message: "Pet already exists" });
   }
+
   if (!req.body) {
-    return res.status(400).json({ message: `The fild is empty` });
+    return res.status(400).json({ message: "The field is empty" });
   }
   if (!req.file) {
-    return res.status(400).json({ message: `The file is not loaded` });
+    return res.status(400).json({ message: "The file is not loaded" });
   }
+
   const result = await Pets.create({
     ...req.body,
     petsURL: req.file.path,
     owner,
   });
-  res.status(201).json({
-    result,
-  });
+
+  res.status(201).json({ result });
 };
 
 module.exports = { listPets, del, addImageAndPet };
