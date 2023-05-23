@@ -60,7 +60,7 @@ const filterNotices = ({ _id, category, search, age, gender }) => {
   //   }
   // }
   if (gender) conditions.sex = gender;
-console.log(age, gender);
+// console.log(age, gender);
 
 
 if (age) {
@@ -68,7 +68,7 @@ if (age) {
   conditions.$expr = { $or: [] };
   let startDateString, endDateString;
   const selectedAges = age.split(",");
-console.log("selectedAges", selectedAges);
+// console.log("selectedAges", selectedAges);
 
 //     const today = new Date();
 // let startDateString = '';
@@ -139,7 +139,7 @@ console.log("selectedAges", selectedAges);
     if (!startDateString || startDate.isBefore(startDateString)) startDateString = startDate.format('DD.MM.YYYY');
     if (!endDateString || endDate.isAfter(endDateString)) endDateString = endDate.format('DD.MM.YYYY');
 
-   console.log(startDateString, endDateString);
+  //  console.log(startDateString, endDateString);
    const condition = {
     $and: [
       {
@@ -166,7 +166,7 @@ console.log("selectedAges", selectedAges);
   }
 };
 
-console.log(conditions);
+// console.log(conditions);
 
 // conditions.$expr = {
 //   $and: [
