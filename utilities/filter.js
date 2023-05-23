@@ -136,10 +136,10 @@ if (age) {
     const startDate = currentDate.clone().subtract(endAge, type).startOf('day');
       const endDate = currentDate.clone().subtract(startAge, type).endOf('day');
 
-    if (!startDateString || startDate.isBefore(startDateString)) startDateString = startDate.format('DD.MM.YYYY');
-    if (!endDateString || endDate.isAfter(endDateString)) endDateString = endDate.format('DD.MM.YYYY');
+    // if (!startDateString || startDate.isBefore(startDateString)) startDateString = startDate.format('DD.MM.YYYY');
+    // if (!endDateString || endDate.isAfter(endDateString)) endDateString = endDate.format('DD.MM.YYYY');
 
-  //  console.log(startDateString, endDateString);
+  //  console.log(startDate.format('DD.MM.YYYY'), endDate.format('DD.MM.YYYY'));
    const condition = {
     $and: [
       {
