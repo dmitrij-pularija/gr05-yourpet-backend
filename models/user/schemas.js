@@ -6,7 +6,6 @@ const user = new Schema(
       type: String,
       minlength: 3,
       maxlength: 20,
-      default: "",
     },
     password: {
       type: String,
@@ -41,7 +40,7 @@ const user = new Schema(
       default: null,
     },
   },
-  { versionKey: false, timestamps: false }
+  { versionKey: false, timestamps: true }
 );
 
 user.post("save", (error, data, next) => {
