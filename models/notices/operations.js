@@ -20,7 +20,6 @@ const getFavoriteByOwner = async ({
   const pageNumber = parseInt(page) || 1;
   const limit = parseInt(perpage) || 20;
   const skip = (pageNumber - 1) * limit;
-
   const filter = filterNotices({
     _id,
     category,
@@ -90,7 +89,6 @@ const getNoticeByCategory = async ({
   const limit = parseInt(perpage) || 20;
   const skip = (pageNumber - 1) * limit;
   const selectedCategory = categories[category];
-
   const filter = filterNotices({
     _id: "",
     category: selectedCategory,

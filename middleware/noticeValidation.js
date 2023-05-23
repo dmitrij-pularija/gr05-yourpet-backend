@@ -39,10 +39,24 @@ const schema = {
     search: Joi.string().min(3).max(30),
     page: Joi.string().min(1).max(4),
     perpage: Joi.string().min(1).max(3),
-    age: Joi.string().valid("1", "2", "3-12").when(Joi.exist(), {
-      then: Joi.required(),
-      otherwise: Joi.forbidden(),
+    age: Joi.string()
+    .custom((value, helpers) => {
+      const values = value.split(',');
+      const validValues = ['1', '2', '3-12'];
+      
+      for (const val of values) {
+        if (!validValues.includes(val)) {
+          return helpers.error('any.invalid');
+        }
+      }
+      
+      return value;
     }),
+
+    // age: Joi.string().valid("1", "2", "3-12").when(Joi.exist(), {
+    //   then: Joi.required(),
+    //   otherwise: Joi.forbidden(),
+    // }),
     gender: Joi.string().valid("female", "male").when(Joi.exist(), {
       then: Joi.required(),
       otherwise: Joi.forbidden(),
