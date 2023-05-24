@@ -28,16 +28,16 @@ app.use("/api/pets", petsRouter);
 app.use("/api/friends", friendsRouter);
 app.use("/api/news", newsRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use("/", (req, res) => {
-	res.redirect("/api-docs");
+app.get("/", (_, res) => {
+  res.redirect("/api-docs");
 });
 app.use((_, res, __) => {
-	res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, _, res, __) => {
-	const { status = 500, message = "Server error" } = err;
-	res.status(status).json({ message });
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
 });
 
 module.exports = app;
